@@ -2,91 +2,152 @@ import numpy
 import itertools
 import copy
 import heapq
+import logging
 
 
-def f(new_q=[], visited=dict(), goal=[]):
-    hashable_q = tuple(new_q)
+def h(current_state, visited):
+    goal = numpy.asarray([0] * (len(current_state) - 1))
+    hashable_q = tuple(current_state)
     h = visited.get(hashable_q)
+    logging.debug("checking visited ... {0}".format(h))
     if not h:
-        h = numpy.linalg.norm(new_q - goal)
-    f = h
-    return f
+        h = numpy.linalg.norm(current_state[1:] - goal)
+    logging.debug("h is ... {0}".format(h))
+    return h
 
 
-def min_phase(current_state=numpy.asarray([1, 2, 3, 4, 5, 6, 7, 8]), phases=itertools.product([0, 1, 2, 3], [4, 5, 6, 7])):
-    goal = numpy.asarray([0] * len(current_state))
-    min_h = []
-    for phase in phases:
+def min_local_f(current_state, domain, visited):
+    min_f = []
+
+    for phase in domain:
+        logging.debug("considering phase ... {0}".format(phase))
         successor_state = copy.copy(current_state)
         in_queue = phase[0]
         out_queue = phase[1]
         change = current_state[in_queue]
+
         successor_state[in_queue] -= change
         successor_state[out_queue] += change
-        h = numpy.linalg.norm(successor_state - goal)
-        heapq.heappush(min_h, (h, phase))
-    return heapq.heappop(min_h), heapq.heappop(min_h)
+        logging.debug("successor would be ... {0}".format(successor_state))
+
+        improved_h = h(successor_state, visited)
+        cost = 1
+        f = cost + improved_h
+        heapq.heappush(min_f, (f, phase))
+
+    best_phase = heapq.heappop(min_f)
+    next_best_phase = heapq.heappop(min_f)
+    logging.debug("best local phase is ... {0}".format(best_phase))
+
+    return best_phase, next_best_phase
+
 
 
 def execute(current_state, phases):
-    next_state = copy.copy(current_state)
-    for phase in phases:
-        simulate(next_state, current_state, phase)
+    logging.debug("EXECUTING ACTION ... {0}".format(phases))
+    next_state = simulate(current_state, phases)
+    logging.debug('CURRENT STATE SHOULD BE ... {0}'.format(next_state))
     return next_state
 
 
-def simulate(successor_state, q, best):
-    in_queue = best[1][0]
-    out_queue = best[1][1]
-    change = q[in_queue]
-    successor_state[in_queue] -= change
-    successor_state[out_queue] += change
+def simulate(current_state, assignments):
+    """
+
+    :param current_state:
+    :param assignments: Is a list of phase changes for each intersection and for fun the f of the phase change when simulated locally
+    :return:
+    """
+
+    successor_state = copy.copy(current_state)
+
+    for phase in assignments:
+
+        in_queue = phase[1][0]
+        out_queue = phase[1][1]
+        change = current_state[in_queue]
+
+        successor_state[in_queue] -= change
+        successor_state[out_queue] += change
+
+    return successor_state
 
 
-def visited_h(alternative_assignments, q, goal, successor_state):
-    next_best_h_min = []
-    for assignment in alternative_assignments:
-        next_best = copy.copy(q)
-        for intersection in assignment:
-            simulate(next_best, q, intersection)
-        next_best_h = numpy.linalg.norm(next_best - goal)
-        if numpy.linalg.norm(next_best - successor_state) > 0:
-            heapq.heappush(next_best_h_min, next_best_h + 1)
-    return heapq.heappop(next_best_h_min)
+def visited_h(alternative_assignments, current_state, successor_state, visited):
+    min_h = []
+    for phases in alternative_assignments:
+        alternative_state = simulate(current_state, phases)
+        visited_h = h(alternative_state, visited)
+        heapq.heappush(min_h, visited_h)
+        logging.debug("considering alternative ... {0}".format(alternative_state))
+        logging.debug("alternative h is ... {0}".format(visited_h))
+    min_alternative = heapq.heappop(min_h)
+    logging.debug("best alternative h is ... {0}".format(min_alternative))
+    return min_alternative
 
 
-def min_f(domain, q):
-    successor_state = copy.copy(q)
+def min_f(domains, current_state, visited):
+    assignment = []
     alternatives = []
-    for intersection in domain:
-        best, next_best = min_phase(q, intersection)
-        simulate(successor_state, q, best)
+    for domain in domains:
+        best, next_best = min_local_f(current_state, domain, visited)
+        assignment.append(best)
         alternatives.append((best, next_best))
-    alternative_assignments = itertools.product(*alternatives)
-    return best, alternative_assignments, successor_state
+    successor_state = simulate(current_state, assignment)
+    logging.debug("best assignment is ... {0}".format(assignment))
+    logging.debug("successor state will be ... {0}".format(successor_state))
+    alternative_assignments = []
+    for omg in itertools.product(*alternatives):
+        alternative_assignments.append(omg)
+    cost = 1
+    next_best_h = cost + visited_h(alternative_assignments, current_state, successor_state, visited)
+    return assignment, next_best_h
+
+def sum_queues(initial_state):
+    queues_sum = 0
+    for queue in initial_state[1:]:
+        queues_sum += queue
+    return queues_sum
+
+def rta_star(initial_state, domain):
+    visited = dict()
+    goal = sum_queues(initial_state)
+    current_state = initial_state
+    while current_state[0] < goal:
+        logging.debug("CURRENT STATE ... {0}".format(current_state))
+        print(current_state)
+        best, new_h = min_f(domain, current_state, visited)
+        visited[tuple(current_state)] = new_h
+        logging.debug("seting h for current state ... {0}".format(current_state))
+        logging.debug("set h to ... {0}".format(new_h))
+        current_state = execute(current_state, best)
+    print(current_state)
+
 
 if __name__ == "__main__":
 
 
 
-    visited = dict()
-    q = numpy.asarray([0] * 8)
-    q[0] = 10
-    q[1] = 10
-    q[2] = 10
-    goal = numpy.asarray([0] * len(q))
+
+    current_state = numpy.asarray([0] * 14)
+    current_state[1] = 10
+    current_state[2] = 10
+    goal = numpy.asarray([0] * (len(current_state) - 1))
 
     '''A problem instance to play with during development'''
     domain = []
-    in_queues_1 = [0, 1, 2, 3]
-    out_queues_1 = [4, 5, 6, 7]
-    phases_1 = itertools.product(in_queues_1, out_queues_1)
+    in_queues_1 = [1, 2, 3, 4]
+    out_queues_1 = [5, 0]
+    phases_1 = []
+    for phase in itertools.product(in_queues_1, out_queues_1):
+        phases_1.append(phase)
     domain.append(phases_1)
 
-    # in_queues_2 = [5, 8, 9, 10]
-    # out_queues_2 = [11, 12, 13, 2]
-    # phases_2 = itertools.product(in_queues_2, out_queues_2)
-    # domain.append(phases_2)
+    in_queues_2 = [5, 8, 9, 10]
+    out_queues_2 = [0, 2]
+    phases_2 = []
+    for phase in itertools.product(in_queues_2, out_queues_2):
+        phases_2.append(phase)
+    domain.append(phases_2)
 
     # in_queues_3 = [12, 14, 15, 16]
     # out_queues_3 = [8, 17, 18, 19]
@@ -115,12 +176,7 @@ if __name__ == "__main__":
     ''''''
 
     import time
-    start_time = time.time()
-
-    for _ in range(10):
-        best, alternatives, successor_state = min_f(domain, q)
-        new_h = visited_h(alternatives, q, goal, successor_state)
-        cost = 1
-        visited[tuple(q)] = new_h + cost
-        q = execute(q, best)
-
+    time.clock()
+    rta_star(current_state, domain)
+    end_time = time.time()
+    print(time.clock())
