@@ -1,5 +1,8 @@
 import numpy
 import itertools
+import copy
+import heapq
+
 
 def f(new_q=[], visited=dict(), goal=[]):
     hashable_q = tuple(new_q)
@@ -8,9 +11,6 @@ def f(new_q=[], visited=dict(), goal=[]):
         h = numpy.linalg.norm(new_q - goal)
     f = h
     return f
-
-def transition(phase_assignments=[(1.0, (0, 4)), (1.0, (5, 2))], current_state=numpy.asarray([1, 2, 3, 4, 5, 6, 7, 8])):
-    return 1
 
 
 def min_phase(current_state=numpy.asarray([1, 2, 3, 4, 5, 6, 7, 8]), phases=itertools.product([0, 1, 2, 3], [4, 5, 6, 7])):
@@ -28,11 +28,46 @@ def min_phase(current_state=numpy.asarray([1, 2, 3, 4, 5, 6, 7, 8]), phases=iter
     return heapq.heappop(min_h), heapq.heappop(min_h)
 
 
+def execute(current_state, phases):
+    next_state = copy.copy(current_state)
+    for phase in phases:
+        simulate(next_state, current_state, phase)
+    return next_state
+
+
+def simulate(successor_state, q, best):
+    in_queue = best[1][0]
+    out_queue = best[1][1]
+    change = q[in_queue]
+    successor_state[in_queue] -= change
+    successor_state[out_queue] += change
+
+
+def visited_h(alternative_assignments, q, goal, successor_state):
+    next_best_h_min = []
+    for assignment in alternative_assignments:
+        next_best = copy.copy(q)
+        for intersection in assignment:
+            simulate(next_best, q, intersection)
+        next_best_h = numpy.linalg.norm(next_best - goal)
+        if numpy.linalg.norm(next_best - successor_state) > 0:
+            heapq.heappush(next_best_h_min, next_best_h + 1)
+    return heapq.heappop(next_best_h_min)
+
+
+def min_f(domain, q):
+    successor_state = copy.copy(q)
+    alternatives = []
+    for intersection in domain:
+        best, next_best = min_phase(q, intersection)
+        simulate(successor_state, q, best)
+        alternatives.append((best, next_best))
+    alternative_assignments = itertools.product(*alternatives)
+    return best, alternative_assignments, successor_state
+
 if __name__ == "__main__":
 
-    import copy
-    import math
-    import heapq
+
 
     visited = dict()
     q = numpy.asarray([0] * 8)
@@ -82,57 +117,10 @@ if __name__ == "__main__":
     import time
     start_time = time.time()
 
+    for _ in range(10):
+        best, alternatives, successor_state = min_f(domain, q)
+        new_h = visited_h(alternatives, q, goal, successor_state)
+        cost = 1
+        visited[tuple(q)] = new_h + cost
+        q = execute(q, best)
 
-    successor_state = copy.copy(q)
-    alternatives = []
-    for intersection in domain:
-        best, next_best = min_phase(q, intersection)
-        in_queue = best[1][0]
-        out_queue = best[1][1]
-        change = q[in_queue]
-        successor_state[in_queue] -= change
-        successor_state[out_queue] += change
-        alternatives.append((best, next_best))
-
-    h = numpy.linalg.norm(successor_state - goal)
-    print(h)
-
-
-    next_best_h_min = []
-
-    alternative_assignments = itertools.product(*alternatives)
-    for assignment in alternative_assignments:
-        next_best = copy.copy(q)
-
-        for intersection in assignment:
-            in_queue = intersection[1][0]
-            out_queue = intersection[1][1]
-            change = q[in_queue]
-            next_best[in_queue] -= change
-            next_best[out_queue] += change
-
-        next_best_h = numpy.linalg.norm(next_best - goal)
-
-        if numpy.linalg.norm(next_best - successor_state) > 0:
-            heapq.heappush(next_best_h_min, next_best_h + 1)
-    print(heapq.heappop(next_best_h_min))
-
-    print(time.time() - start_time)
-
-    current_state = q
-    arg_min = None
-    min_f = float("inf")
-    next_min_f = min_f
-
-
-
-
-    # f = f(new_q, visited, goal)
-    #
-    # if f < min_f:
-    #     arg_min = assignment
-    #     next_min_f = min_f
-    #     min_f = f
-    #
-    # visited[tuple(current_state)] =  next_min_f
-    # print arg_min
