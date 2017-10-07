@@ -123,60 +123,30 @@ def rta_star(initial_state, domain):
     print(current_state)
 
 
+def quick_domain(in_queues, out_queues):
+    phases = []
+    for phase in itertools.product(in_queues, out_queues):
+        phases.append(phase)
+    return phases
+
 if __name__ == "__main__":
 
 
-
-
-    current_state = numpy.asarray([0] * 14)
-    current_state[1] = 10
-    current_state[2] = 10
+    current_state = numpy.arange(28)
     goal = numpy.asarray([0] * (len(current_state) - 1))
+    domains = []
+    domains.append(quick_domain([1, 2, 3, 4], [0, 5]))
+    domains.append(quick_domain([5, 6, 7, 8], [0, 2, 9, 19]))
+    domains.append(quick_domain([9, 10, 11, 12],  [0, 6, 13]))
+    domains.append(quick_domain([13, 14, 15], [0, 12, 16]))
+    domains.append(quick_domain([16, 17, 18, 19], [0, 15, 20]))
+    domains.append(quick_domain([20, 21, 22, 23], [0, 19, 24, 7]))
+    domains.append(quick_domain([24, 25, 26, 27], [0, 20, 3]))
 
-    '''A problem instance to play with during development'''
-    domain = []
-    in_queues_1 = [1, 2, 3, 4]
-    out_queues_1 = [5, 0]
-    phases_1 = []
-    for phase in itertools.product(in_queues_1, out_queues_1):
-        phases_1.append(phase)
-    domain.append(phases_1)
 
-    in_queues_2 = [5, 8, 9, 10]
-    out_queues_2 = [0, 2]
-    phases_2 = []
-    for phase in itertools.product(in_queues_2, out_queues_2):
-        phases_2.append(phase)
-    domain.append(phases_2)
-
-    # in_queues_3 = [12, 14, 15, 16]
-    # out_queues_3 = [8, 17, 18, 19]
-    # phases_3 = itertools.product(in_queues_1, out_queues_3)
-    # domain.append(phases_3)
-
-    # in_queues_4 = [20, 19, 22, 21]
-    # out_queues_4 = [15, 24, 25, 13]
-    # phases_4 = itertools.product(in_queues_2, out_queues_4)
-    # domain.append(phases_4)
-
-    # in_queues_5 = [26, 13, 28, 27]
-    # out_queues_5 = [9, 20, 30, 6]
-    # phases_5 = itertools.product(in_queues_1, out_queues_5)
-    # domain.append(phases_5)
-
-    # in_queues_6 = [31, 6, 32, 33]
-    # out_queues_6 = [2, 26, 34, 35]
-    # phases_6 = itertools.product(in_queues_2, out_queues_6)
-    # domain.append(phases_6)
-
-    # in_queues_7 = [36, 34, 38, 37]
-    # out_queues_7 = [41, 32, 39, 40]
-    # phases_7 = itertools.product(in_queues_2, out_queues_7)
-    # domain.append(phases_7)
-    ''''''
 
     import time
     time.clock()
-    rta_star(current_state, domain)
+    rta_star(current_state, domains)
     end_time = time.time()
     print(time.clock())
