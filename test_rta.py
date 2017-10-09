@@ -39,13 +39,12 @@ class MyTestCase(unittest.TestCase):
 
     def test_visited_h(self):
         current_state = numpy.arange(3) + 1
-        successor_state = rta_star.simulate(current_state, ((0, (0, 1)), ))
         visited = dict()
-        alternative_assignments = (((0, (0, 2)), ), )
-        next_best_h = rta_star.visited_h(alternative_assignments, current_state, successor_state, visited)
-        goal = numpy.asarray([0] * len(current_state))
-        h = numpy.linalg.norm(successor_state - goal)
-        self.assertEqual(next_best_h > h, True, (next_best_h, h))
+        best = [(1.0, (1, 0, 1, 1))]
+        alternatives = [(2.0, (2, 0, 1, 2))]
+        next_best_h = rta_star.visited_h(alternatives, current_state, visited, 1, best)
+        #goal = numpy.asarray([0] * len(current_state))
+        #self.assertEqual(next_best_h > h, True, (next_best_h, h))
 
     def test_min_f(self):
         domains = (((0, 1), (0, 2)), )
