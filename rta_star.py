@@ -170,7 +170,8 @@ if __name__ == "__main__":
     import domain
 
     #queues, intersections = domain.connect(10, 10)
-
+    #current_state = numpy.arange(queues) % 10 * -1
+    #print(current_state)
     current_state = numpy.asarray([0] * queues)
     current_state[24] = 200
     current_state[23] = 200
