@@ -146,8 +146,7 @@ def quick_domain(in_queues, out_queues, exceptions):
 
 if __name__ == "__main__":
 
-
-
+    '''
     domains = []
     domains.append((quick_domain([1, 2, 3, 4], [5, 24, 28, 29], {(3, 5): True, (4, 24): True, (1, 28): True, (2, 29): True}), [1, 2, 3, 4]))
     domains.append((quick_domain([5, 6, 7, 8], [3, 9, 20, 30], {(6, 30): True, (5, 3): True, (7, 9): True, (8, 20): True}), [5, 6, 7, 8]))
@@ -166,22 +165,25 @@ if __name__ == "__main__":
     sink = 1
     queues = 35 + sink
     #print(domains)
+    '''
 
     import domain
-
-    #queues, intersections = domain.connect(10, 10)
-    #current_state = numpy.arange(queues) % 10 * -1
-    #print(current_state)
-    current_state = numpy.asarray([0] * queues)
-    current_state[24] = 200
-    current_state[23] = 200
-    current_state[19] = 200
+    queues, intersections = domain.connect(4, 4)
+    current_state = numpy.arange(queues) + 100
+    some_numbers = abs(numpy.random.randn(10) * 100)
+    print(some_numbers)
+    print(current_state)
+    #McCluskey
+    #current_state = numpy.asarray([0] * queues)
+    #current_state[24] = 200
+    #current_state[23] = 200
+    #current_state[19] = 200
     goal = numpy.asarray([0] * (len(current_state) - 1))
-    #domains = []
-    #for intersection in intersections:
-    #    in_queues = intersection[0]
-    #    out_queues = intersection[1]
-    #    exceptions = intersection[2]
-    #    domains.append((quick_domain(in_queues, out_queues, exceptions), in_queues))
+    domains = []
+    for intersection in intersections:
+        in_queues = intersection[0]
+        out_queues = intersection[1]
+        exceptions = intersection[2]
+        domains.append((quick_domain(in_queues, out_queues, exceptions), in_queues))
 
     rta_star(current_state, domains)
