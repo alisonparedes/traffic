@@ -170,8 +170,6 @@ if __name__ == "__main__":
     import domain
     queues, intersections = domain.connect(4, 4)
     current_state = numpy.arange(queues) + 100
-    some_numbers = abs(numpy.random.randn(10) * 100)
-    print(some_numbers)
     print(current_state)
     #McCluskey
     #current_state = numpy.asarray([0] * queues)
