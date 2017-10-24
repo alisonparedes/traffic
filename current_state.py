@@ -23,6 +23,9 @@ if __name__ == "__main__":
     phase_rate = dict()
     phase_rate[(1, 1)] = 0.21875
 
+    phase_queues = dict()
+    phase_queues[(1, 1)] = (1, 2)
+
     # Capacities never change. Do this once.
     max_capacity = dict()
     max_capacity[1] = 35
@@ -40,3 +43,6 @@ if __name__ == "__main__":
         visited[(queues, phases, times)] = h
     print h
     print visited
+
+    for i, phase in phases:
+        phase_queues[(i, phase)]
