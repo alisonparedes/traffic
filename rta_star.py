@@ -17,28 +17,20 @@ def h(current_state, visited):
     return h
 
 
-def min_local_f(current_state, domain, visited):
+def min_local_f(current_intersections, intersection, actions):
     phases = []
     intervals = set()
     in_queues = domain[1]
-    for q in in_queues:
-        if current_state[q] > 0:
-            intervals.add(min(current_state[q], 25))
-    with_intervals = itertools.product(domain[0], intervals)
-    for phase in with_intervals:
-        in_queue = phase[0][0]
-        out_queue = phase[0][1]
-        rate = phase[0][2]
-        interval = phase[1]
-        phases.append((in_queue, out_queue, rate, interval))
+    #for q in in_queues:
+    #    if current_state[q] > 0:
+    #        intervals.add(min(current_state[q], 25))
+    #with_intervals = itertools.product(domain[0], intervals)
     min_f = []
-    for phase in phases:
+    for phase in actions:
+        successor_intersections = copy.copy(current_intersections)
+        successor_intersections[intersection] = phase
+        active_flows = state.set_rates(current_intersections, )
         successor_state = copy.copy(current_state)
-        in_queue = phase[0]
-        out_queue = phase[1]
-        rate = phase[2]
-        interval = phase[3]
-        change = min(interval * rate, current_state[in_queue], 10)
         successor_state[in_queue] -= change
         successor_state[out_queue] += change
         improved_h = h(successor_state, visited)
@@ -56,6 +48,7 @@ def min_local_f(current_state, domain, visited):
     return best_phase, next_best_phase
 
 
+'''
 def simulate(current_state, assignments, interval):
     successor_state = copy.copy(current_state)
     for phase in assignments:
@@ -67,6 +60,7 @@ def simulate(current_state, assignments, interval):
             successor_state[in_queue] -= change
             successor_state[out_queue] += change
     return successor_state
+'''
 
 
 def visited_h(alternatives, current_state, visited, max_interval, best):
@@ -85,12 +79,12 @@ def visited_h(alternatives, current_state, visited, max_interval, best):
     return min_h
 
 
-def min_f(domains, current_state, visited):
+def min_f(current_queues, current_intersections):
     assignment = []
     alternatives = []
     max_interval = 0
-    for domain in domains:
-        best, next_best = min_local_f(current_state, domain, visited)
+    for intersection, actions in state.applicable_actions(current_intersections).iteritems():
+        best, next_best = min_local_f(current_intersections, intersection, actions)
         if best:
             interval = best[1][3]
             if interval > max_interval:
@@ -107,15 +101,17 @@ def sum_queues(initial_state):
         queues_sum += queue
     return queues_sum
 
-def rta_star(initial_state, goal, actions):
+def rta_star(initial_queues, initial_intersections):
     visited = dict()
-    current_state = initial_state
+    current_queues = initial_queues
+    current_intersections = initial_intersections
     execution_time = 0
     max_search_time = 0
-    print(current_state)
-    while state.is_goal(goal, ):
+    print(current_queues)
+    print(goal)
+    while not state.is_goal(goal, current_queues):
         start_time = time.clock()
-        best, new_h, interval = min_f(domain, current_state, visited)
+        best, new_h = min_f(current_queues, current_intersections)  #TODO: Put interval back
         end_time = time.clock()-start_time
         if end_time > max_search_time:
             max_search_time = end_time
@@ -166,15 +162,12 @@ if __name__ == "__main__":
     queues = 35 + sink
     #print(domains)
     '''
-    import domain
-    initial_state = domain.mccluskey_state()
-    actions = domain.mccluskey_actions()
-    goal = domain.mccluskey_goal()
+    queues, intersections, edges, phases, goal = state.init_problem()
     #print(current_state)
     #print(actions)
     #print(goal)
 
-    rta_star(initial_state, goal, actions)
+    rta_star(queues, intersections)
 
 '''
     visited = dict()
