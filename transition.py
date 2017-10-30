@@ -1,6 +1,6 @@
 from gurobipy import *
 
-def maximize_flows(rate={}):
+def maximize_flows(rates={}):
 
     m = Model("transition")
 
@@ -524,12 +524,11 @@ def maximize_flows(rate={}):
 
     m.optimize()
 
-    '''
+    max_flow = {}
     for v in m.getVars():
-        print('%s %g' % (v.varName, v.x))
-    print('Obj: %g' % m.objVal)
-    '''
-    return m.getVars()
+        max_flow[v.varName] = v.x
+
+    return max_flow
 
 if __name__ == "__main__":
     import sys
@@ -614,4 +613,7 @@ if __name__ == "__main__":
     rates["outside__L6159_1353"] = 0.01667 * t
     rates["outside__L6159_6014"] = 0.15167 * t
 
-max_flow = maximize_flows(rates)
+#for _ in range(1000):
+#    max_flow = maximize_flows(rates)
+
+#max_flow = maximize_flows(rates)

@@ -5,6 +5,7 @@ import heapq
 import logging
 import time
 import os
+import state
 
 
 def h(current_state, visited):
@@ -106,14 +107,13 @@ def sum_queues(initial_state):
         queues_sum += queue
     return queues_sum
 
-def rta_star(initial_state, domain):
+def rta_star(initial_state, goal, actions):
     visited = dict()
-    goal = sum_queues(initial_state)
     current_state = initial_state
     execution_time = 0
     max_search_time = 0
     print(current_state)
-    while current_state[0] < goal:
+    while state.is_goal(goal, ):
         start_time = time.clock()
         best, new_h, interval = min_f(domain, current_state, visited)
         end_time = time.clock()-start_time
@@ -166,22 +166,20 @@ if __name__ == "__main__":
     queues = 35 + sink
     #print(domains)
     '''
-
     import domain
-    queues, intersections = domain.connect(4, 4)
-    current_state = numpy.arange(queues) + 100
-    print(current_state)
-    #McCluskey
-    #current_state = numpy.asarray([0] * queues)
-    #current_state[24] = 200
-    #current_state[23] = 200
-    #current_state[19] = 200
-    goal = numpy.asarray([0] * (len(current_state) - 1))
-    domains = []
-    for intersection in intersections:
-        in_queues = intersection[0]
-        out_queues = intersection[1]
-        exceptions = intersection[2]
-        domains.append((quick_domain(in_queues, out_queues, exceptions), in_queues))
+    initial_state = domain.mccluskey_state()
+    actions = domain.mccluskey_actions()
+    goal = domain.mccluskey_goal()
+    #print(current_state)
+    #print(actions)
+    #print(goal)
 
-    rta_star(current_state, domains)
+    rta_star(initial_state, goal, actions)
+
+'''
+    visited = dict()
+
+    for _ in range(100000):
+        state = (tuple(queues.iteritems()), tuple(intersections.iteritems()))
+        visited[state] = h #TODO: h of alternative
+'''
