@@ -8,35 +8,30 @@ import os
 import state
 
 
-def h(current_state, visited):
-    goal = numpy.asarray([0] * (len(current_state) - 1))
-    hashable_q = tuple(current_state[1:])
-    h = visited.get(hashable_q)
+def h(queues, intersections, goal):
+    h = visited.get((tuple(queues.iteritems()), tuple(intersections.iteritems())))
     if not h:
-        h = numpy.linalg.norm(current_state[1:] - goal)
+        h = state.heuristic(queues, goal)
     return h
 
 
-def min_local_f(current_intersections, intersection, actions):
-    phases = []
-    intervals = set()
-    in_queues = domain[1]
+def min_local_f(current_queues, current_intersections, intersection, actions):
     #for q in in_queues:
     #    if current_state[q] > 0:
     #        intervals.add(min(current_state[q], 25))
     #with_intervals = itertools.product(domain[0], intervals)
+    interval = 100
     min_f = []
     for phase in actions:
         successor_intersections = copy.copy(current_intersections)
         successor_intersections[intersection] = phase
-        active_flows = state.set_rates(current_intersections, )
-        successor_state = copy.copy(current_state)
-        successor_state[in_queue] -= change
-        successor_state[out_queue] += change
-        improved_h = h(successor_state, visited)
+        active_flows = state.get_rates(current_intersections, interval)
+        max_flows = active_flows  #TODO: Call Gurobi
+        successor_queues = state.simulate(current_queues, active_flows)
+        improved_h = h(successor_queues, successor_intersections, goal)
         cost = 1
         f = cost + improved_h
-        heapq.heappush(min_f, (f, phase))
+        heapq.heappush(min_f, (f, (intersection, phase)))
     try:
         best_phase = heapq.heappop(min_f)
     except IndexError:
@@ -71,7 +66,7 @@ def visited_h(alternatives, current_state, visited, max_interval, best):
         next_best[i] = phase
         if phase:
             interval = phase[1][3]
-            alternative_state = simulate(current_state, next_best, max(max_interval, interval))
+            alternative_state = state.simulate(current_state, next_best, max(max_interval, interval))
             visited_h = h(alternative_state, visited)
             if visited_h < min_h:
                 min_h = visited_h
@@ -84,11 +79,11 @@ def min_f(current_queues, current_intersections):
     alternatives = []
     max_interval = 0
     for intersection, actions in state.applicable_actions(current_intersections).iteritems():
-        best, next_best = min_local_f(current_intersections, intersection, actions)
-        if best:
-            interval = best[1][3]
-            if interval > max_interval:
-                max_interval = interval
+        best, next_best = min_local_f(current_queues, current_intersections, intersection, actions)
+        #if best:
+            #interval = best[1][3]
+            #if interval > max_interval:
+            #    max_interval = interval
         assignment.append(best)
         alternatives.append(next_best)
     cost = 1
@@ -102,7 +97,6 @@ def sum_queues(initial_state):
     return queues_sum
 
 def rta_star(initial_queues, initial_intersections):
-    visited = dict()
     current_queues = initial_queues
     current_intersections = initial_intersections
     execution_time = 0
@@ -162,17 +156,10 @@ if __name__ == "__main__":
     queues = 35 + sink
     #print(domains)
     '''
-    queues, intersections, edges, phases, goal = state.init_problem()
+    queues, intersections, goal = state.init_problem()
     #print(current_state)
     #print(actions)
     #print(goal)
-
+    visited = dict()
     rta_star(queues, intersections)
 
-'''
-    visited = dict()
-
-    for _ in range(100000):
-        state = (tuple(queues.iteritems()), tuple(intersections.iteritems()))
-        visited[state] = h #TODO: h of alternative
-'''

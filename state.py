@@ -138,7 +138,7 @@ def applicable_actions(intersections):
     return applicable
 
 
-def heuristic(goal, queues):
+def heuristic(queues, goal):
     current_state = []
     goal_state = []
     for queue, capacity in goal.iteritems():
@@ -159,7 +159,7 @@ def is_goal(goal, queues):
     return True
 
 
-def set_rates(intersections, interval=100):
+def get_rates(intersections, interval=100):
     rates = {}
     for flow in edges.iterkeys():
         rates[flow] = 0.0
@@ -174,9 +174,8 @@ def set_rates(intersections, interval=100):
 def init_problem():
     queues = init_queues()
     intersections = init_intersections()
-    phases = init_phases()
     goal = init_goal()
-    return queues, intersections, edges, phases, goal
+    return queues, intersections, goal
 
 
 def init_queues():
@@ -286,6 +285,358 @@ edges["outside__L5840_6013"] = ("outside", "L5840_6013")
 edges["outside__L6159_1353"] = ("outside", "L6159_1353")
 edges["outside__L6159_6014"] = ("outside", "L6159_6014")
 
+phases = {}
+if phases.get("S1202_s0"):
+    phases["S1202_s0"].append(("L3966_1202__L1202_1349", 0.64522))
+else:
+    phases["S1202_s0"] = [("L3966_1202__L1202_1349", 0.64522)]
+if phases.get("S1202_s1"):
+    phases["S1202_s1"].append(("L3966_1202__L1202_1349", 0.64522))
+else:
+    phases["S1202_s1"] = [("L3966_1202__L1202_1349", 0.64522)]
+if phases.get("S1202_s2"):
+    phases["S1202_s2"].append(("L3966_1202__L1202_1349", 0.64522))
+else:
+    phases["S1202_s2"] = [("L3966_1202__L1202_1349", 0.64522)]
+if phases.get("S1202_s3"):
+    phases["S1202_s3"].append(("L3966_1202__L1202_1349", 0.64522))
+else:
+    phases["S1202_s3"] = [("L3966_1202__L1202_1349", 0.64522)]
+if phases.get("S1202_s6"):
+    phases["S1202_s6"].append(("L6013_1202__L1202_1349", 0.165))
+else:
+    phases["S1202_s6"] = [("L6013_1202__L1202_1349", 0.165)]
+if phases.get("S1202_s3"):
+    phases["S1202_s3"].append(("L1349_1202__L1202_3967", 0.825))
+else:
+    phases["S1202_s3"] = [("L1349_1202__L1202_3967", 0.825)]
+if phases.get("S1202_s4"):
+    phases["S1202_s4"].append(("L1349_1202__L1202_3967", 0.825))
+else:
+    phases["S1202_s4"] = [("L1349_1202__L1202_3967", 0.825)]
+if phases.get("S1202_s0"):
+    phases["S1202_s0"].append(("L6013_1202__L1202_3967", 0.41067))
+else:
+    phases["S1202_s0"] = [("L6013_1202__L1202_3967", 0.41067)]
+if phases.get("S1202_s1"):
+    phases["S1202_s1"].append(("L6013_1202__L1202_3967", 0.41067))
+else:
+    phases["S1202_s1"] = [("L6013_1202__L1202_3967", 0.41067)]
+if phases.get("S1202_s5"):
+    phases["S1202_s5"].append(("L6013_1202__L1202_3967", 0.41067))
+else:
+    phases["S1202_s5"] = [("L6013_1202__L1202_3967", 0.41067)]
+if phases.get("S1202_s6"):
+    phases["S1202_s6"].append(("L6013_1202__L1202_3967", 0.41067))
+else:
+    phases["S1202_s6"] = [("L6013_1202__L1202_3967", 0.41067)]
+if phases.get("S1202_s2"):
+    phases["S1202_s2"].append(("L1349_1202__L1202_6013", 0.11138))
+else:
+    phases["S1202_s2"] = [("L1349_1202__L1202_6013", 0.11138)]
+if phases.get("S1202_s3"):
+    phases["S1202_s3"].append(("L1349_1202__L1202_6013", 0.11138))
+else:
+    phases["S1202_s3"] = [("L1349_1202__L1202_6013", 0.11138)]
+if phases.get("S1202_s4"):
+    phases["S1202_s4"].append(("L1349_1202__L1202_6013", 0.11138))
+else:
+    phases["S1202_s4"] = [("L1349_1202__L1202_6013", 0.11138)]
+if phases.get("S1202_s0"):
+    phases["S1202_s0"].append(("L3966_1202__L1202_6013", 0.71739))
+else:
+    phases["S1202_s0"] = [("L3966_1202__L1202_6013", 0.71739)]
+if phases.get("fake"):
+    phases["fake"].append(("outside__L1216_1352", 0.075))
+else:
+    phases["fake"] = [("outside__L1216_1352", 0.075)]
+if phases.get("fake"):
+    phases["fake"].append(("outside__L1233_1352", 0.17667))
+else:
+    phases["fake"] = [("outside__L1233_1352", 0.17667)]
+if phases.get("S1349_s0"):
+    phases["S1349_s0"].append(("L1353_1349__L1349_1202", 0.01961))
+else:
+    phases["S1349_s0"] = [("L1353_1349__L1349_1202", 0.01961)]
+if phases.get("S1349_s3"):
+    phases["S1349_s3"].append(("L1353_1349__L1349_1202", 0.01961))
+else:
+    phases["S1349_s3"] = [("L1353_1349__L1349_1202", 0.01961)]
+if phases.get("S1349_s1"):
+    phases["S1349_s1"].append(("L1867_1349__L1349_1202", 0.79845))
+else:
+    phases["S1349_s1"] = [("L1867_1349__L1349_1202", 0.79845)]
+if phases.get("S1349_s2"):
+    phases["S1349_s2"].append(("L3621_1349__L1349_1202", 0.33333))
+else:
+    phases["S1349_s2"] = [("L3621_1349__L1349_1202", 0.33333)]
+if phases.get("S1349_s1"):
+    phases["S1349_s1"].append(("L1867_1349__L1349_1353", 0.03876))
+else:
+    phases["S1349_s1"] = [("L1867_1349__L1349_1353", 0.03876)]
+if phases.get("S1349_s3"):
+    phases["S1349_s3"].append(("L3621_1349__L1349_1353", 0.03333))
+else:
+    phases["S1349_s3"] = [("L3621_1349__L1349_1353", 0.03333)]
+if phases.get("S1349_s0"):
+    phases["S1349_s0"].append(("L1202_1349__L1349_1867", 0.73030))
+else:
+    phases["S1349_s0"] = [("L1202_1349__L1349_1867", 0.73030)]
+if phases.get("S1349_s1"):
+    phases["S1349_s1"].append(("L1202_1349__L1349_1867", 0.73030))
+else:
+    phases["S1349_s1"] = [("L1202_1349__L1349_1867", 0.73030)]
+if phases.get("S1349_s2"):
+    phases["S1349_s2"].append(("L1353_1349__L1349_1867", 0.35))
+else:
+    phases["S1349_s2"] = [("L1353_1349__L1349_1867", 0.35)]
+if phases.get("S1349_s0"):
+    phases["S1349_s0"].append(("L1202_1349__L1349_3621", 0.08))
+else:
+    phases["S1349_s0"] = [("L1202_1349__L1349_3621", 0.08)]
+if phases.get("S1349_s1"):
+    phases["S1349_s1"].append(("L1202_1349__L1349_3621", 0.08))
+else:
+    phases["S1349_s1"] = [("L1202_1349__L1349_3621", 0.08)]
+if phases.get("S1349_s3"):
+    phases["S1349_s3"].append(("L1353_1349__L1349_3621", 0.16667))
+else:
+    phases["S1349_s3"] = [("L1353_1349__L1349_3621", 0.16667)]
+if phases.get("S1349_s1"):
+    phases["S1349_s1"].append(("L1867_1349__L1349_3621", 0.00388))
+else:
+    phases["S1349_s1"] = [("L1867_1349__L1349_3621", 0.00388)]
+if phases.get("S1352_s1"):
+    phases["S1352_s1"].append(("L1233_1352__L1352_1353", 0.27778))
+else:
+    phases["S1352_s1"] = [("L1233_1352__L1352_1353", 0.27778)]
+if phases.get("S1352_s0"):
+    phases["S1352_s0"].append(("L1867_1352__L1352_1353", 0.08333))
+else:
+    phases["S1352_s0"] = [("L1867_1352__L1352_1353", 0.08333)]
+if phases.get("S1352_s0"):
+    phases["S1352_s0"].append(("L1216_1352__L1352_1867", 0.15385))
+else:
+    phases["S1352_s0"] = [("L1216_1352__L1352_1867", 0.15385)]
+if phases.get("S1352_s1"):
+    phases["S1352_s1"].append(("L1233_1352__L1352_1867", 0.19192))
+else:
+    phases["S1352_s1"] = [("L1233_1352__L1352_1867", 0.19192)]
+if phases.get("S1353_s0"):
+    phases["S1353_s0"].append(("L6014_1353__L1353_1349", 0.24643))
+else:
+    phases["S1353_s0"] = [("L6014_1353__L1353_1349", 0.24643)]
+if phases.get("S1353_s1"):
+    phases["S1353_s1"].append(("L6159_1353__L1353_1349", 0.0525))
+else:
+    phases["S1353_s1"] = [("L6159_1353__L1353_1349", 0.0525)]
+if phases.get("S1353_s1"):
+    phases["S1353_s1"].append(("L1349_1353__L1353_1352", 0.0075))
+else:
+    phases["S1353_s1"] = [("L1349_1353__L1353_1352", 0.0075)]
+if phases.get("S1353_s0"):
+    phases["S1353_s0"].append(("L6014_1353__L1353_1352", 0.075))
+else:
+    phases["S1353_s0"] = [("L6014_1353__L1353_1352", 0.075)]
+if phases.get("S1353_s1"):
+    phases["S1353_s1"].append(("L6159_1353__L1353_1352", 0.03))
+else:
+    phases["S1353_s1"] = [("L6159_1353__L1353_1352", 0.03)]
+if phases.get("S1353_s0"):
+    phases["S1353_s0"].append(("L1352_1353__L1353_6014", 0.48837))
+else:
+    phases["S1353_s0"] = [("L1352_1353__L1353_6014", 0.48837)]
+if phases.get("S1353_s2"):
+    phases["S1353_s2"].append(("L1352_1353__L1353_6014", 0.72414))
+else:
+    phases["S1353_s2"] = [("L1352_1353__L1353_6014", 0.72414)]
+if phases.get("S1867_s2"):
+    phases["S1867_s2"].append(("L1352_1867__L1867_1349", 0.33333))
+else:
+    phases["S1867_s2"] = [("L1352_1867__L1867_1349", 0.33333)]
+if phases.get("S1867_s2"):
+    phases["S1867_s2"].append(("L3621_1867__L1867_1349", 0.125))
+else:
+    phases["S1867_s2"] = [("L3621_1867__L1867_1349", 0.125)]
+if phases.get("S1867_s1"):
+    phases["S1867_s1"].append(("L4574_1867__L1867_1349", 0.73077))
+else:
+    phases["S1867_s1"] = [("L4574_1867__L1867_1349", 0.73077)]
+if phases.get("S1867_s0"):
+    phases["S1867_s0"].append(("L1349_1867__L1867_1352", 0.07547))
+else:
+    phases["S1867_s0"] = [("L1349_1867__L1867_1352", 0.07547)]
+if phases.get("S1867_s1"):
+    phases["S1867_s1"].append(("L1349_1867__L1867_1352", 0.07547))
+else:
+    phases["S1867_s1"] = [("L1349_1867__L1867_1352", 0.07547)]
+if phases.get("S1867_s2"):
+    phases["S1867_s2"].append(("L3621_1867__L1867_1352", 0.25))
+else:
+    phases["S1867_s2"] = [("L3621_1867__L1867_1352", 0.25)]
+if phases.get("S1867_s1"):
+    phases["S1867_s1"].append(("L4574_1867__L1867_1352", 0.03419))
+else:
+    phases["S1867_s1"] = [("L4574_1867__L1867_1352", 0.03419)]
+if phases.get("S1867_s2"):
+    phases["S1867_s2"].append(("L1352_1867__L1867_3621", 0.21875))
+else:
+    phases["S1867_s2"] = [("L1352_1867__L1867_3621", 0.21875)]
+if phases.get("S1867_s1"):
+    phases["S1867_s1"].append(("L4574_1867__L1867_3621", 0.04273))
+else:
+    phases["S1867_s1"] = [("L4574_1867__L1867_3621", 0.04273)]
+if phases.get("S1867_s0"):
+    phases["S1867_s0"].append(("L1349_1867__L1867_4574", 0.76730))
+else:
+    phases["S1867_s0"] = [("L1349_1867__L1867_4574", 0.76730)]
+if phases.get("S1867_s1"):
+    phases["S1867_s1"].append(("L1349_1867__L1867_4574", 0.76730))
+else:
+    phases["S1867_s1"] = [("L1349_1867__L1867_4574", 0.76730)]
+if phases.get("S1867_s2"):
+    phases["S1867_s2"].append(("L1352_1867__L1867_4574", 0.11458))
+else:
+    phases["S1867_s2"] = [("L1352_1867__L1867_4574", 0.11458)]
+if phases.get("S1867_s2"):
+    phases["S1867_s2"].append(("L3621_1867__L1867_4574", 0.21875))
+else:
+    phases["S1867_s2"] = [("L3621_1867__L1867_4574", 0.21875)]
+if phases.get("fake"):
+    phases["fake"].append(("outside__L3621_1867", 0.085))
+else:
+    phases["fake"] = [("outside__L3621_1867", 0.085)]
+if phases.get("fake"):
+    phases["fake"].append(("outside__L5840_6013", 0.08333))
+else:
+    phases["fake"] = [("outside__L5840_6013", 0.08333)]
+if phases.get("S6013_s2"):
+    phases["S6013_s2"].append(("L5840_6013__L6013_1202", 0.16667))
+else:
+    phases["S6013_s2"] = [("L5840_6013__L6013_1202", 0.16667)]
+if phases.get("S6013_s1"):
+    phases["S6013_s1"].append(("L6014_6013__L6013_1202", 0.51010))
+else:
+    phases["S6013_s1"] = [("L6014_6013__L6013_1202", 0.51010)]
+if phases.get("S6013_s0"):
+    phases["S6013_s0"].append(("L1202_6013__L6013_5840", 0.19774))
+else:
+    phases["S6013_s0"] = [("L1202_6013__L6013_5840", 0.19774)]
+if phases.get("S6013_s1"):
+    phases["S6013_s1"].append(("L1202_6013__L6013_5840", 0.19774))
+else:
+    phases["S6013_s1"] = [("L1202_6013__L6013_5840", 0.19774)]
+if phases.get("S6013_s1"):
+    phases["S6013_s1"].append(("L6014_6013__L6013_5840", 0.02020))
+else:
+    phases["S6013_s1"] = [("L6014_6013__L6013_5840", 0.02020)]
+if phases.get("S6013_s0"):
+    phases["S6013_s0"].append(("L1202_6013__L6013_6014", 0.14972))
+else:
+    phases["S6013_s0"] = [("L1202_6013__L6013_6014", 0.14972)]
+if phases.get("S6013_s1"):
+    phases["S6013_s1"].append(("L1202_6013__L6013_6014", 0.14972))
+else:
+    phases["S6013_s1"] = [("L1202_6013__L6013_6014", 0.14972)]
+if phases.get("S6013_s2"):
+    phases["S6013_s2"].append(("L5840_6013__L6013_6014", 0.06349))
+else:
+    phases["S6013_s2"] = [("L5840_6013__L6013_6014", 0.06349)]
+if phases.get("S6014_s0"):
+    phases["S6014_s0"].append(("L6013_6014__L6014_1353", 0.05625))
+else:
+    phases["S6014_s0"] = [("L6013_6014__L6014_1353", 0.05625)]
+if phases.get("S6014_s1"):
+    phases["S6014_s1"].append(("L6159_6014__L6014_1353", 0.4))
+else:
+    phases["S6014_s1"] = [("L6159_6014__L6014_1353", 0.4)]
+if phases.get("S6014_s3"):
+    phases["S6014_s3"].append(("L1353_6014__L6014_6013", 0.10714))
+else:
+    phases["S6014_s3"] = [("L1353_6014__L6014_6013", 0.10714)]
+if phases.get("S6014_s0"):
+    phases["S6014_s0"].append(("L6159_6014__L6014_6013", 0.37105))
+else:
+    phases["S6014_s0"] = [("L6159_6014__L6014_6013", 0.37105)]
+if phases.get("S6014_s1"):
+    phases["S6014_s1"].append(("L6159_6014__L6014_6013", 0.37105))
+else:
+    phases["S6014_s1"] = [("L6159_6014__L6014_6013", 0.37105)]
+if phases.get("fake"):
+    phases["fake"].append(("outside__L6159_1353", 0.01667))
+else:
+    phases["fake"] = [("outside__L6159_1353", 0.01667)]
+if phases.get("fake"):
+    phases["fake"].append(("outside__L6159_6014", 0.15167))
+else:
+    phases["fake"] = [("outside__L6159_6014", 0.15167)]
+if phases.get("fake"):
+    phases["fake"].append(("L1202_3967__outside", 0.49333))
+else:
+    phases["fake"] = [("L1202_3967__outside", 0.49333)]
+if phases.get("S1352_s0"):
+    phases["S1352_s0"].append(("L1216_1352__outside", 0.10256))
+else: phases["S1352_s0"] = [("L1216_1352__outside", 0.10256)]
+if phases.get("S1352_s1"):
+    phases["S1352_s1"].append(("L1233_1352__outside", 0.06061))
+else:
+    phases["S1352_s1"] = [("L1233_1352__outside", 0.06061)]
+if phases.get("S1353_s1"):
+    phases["S1353_s1"].append(("L1349_1353__outside", 0.045))
+else:
+    phases["S1353_s1"] = [("L1349_1353__outside", 0.045)]
+if phases.get("fake"):
+    phases["fake"].append(("L1349_3621__outside", 0.075))
+else:
+    phases["fake"] = [("L1349_3621__outside", 0.075)]
+if phases.get("S1353_s0"):
+    phases["S1353_s0"].append(("L1352_1353__outside", 0.19535))
+else:
+    phases["S1353_s0"] = [("L1352_1353__outside", 0.19535)]
+if phases.get("S1353_s2"):
+    phases["S1353_s2"].append(("L1352_1353__outside", 0.28966))
+else:
+    phases["S1353_s2"] = [("L1352_1353__outside", 0.28966)]
+if phases.get("S1352_s1"):
+    phases["S1352_s1"].append(("L1353_1352__outside", 0.05556))
+else:
+    phases["S1352_s1"] = [("L1353_1352__outside", 0.05556)]
+if phases.get("S1352_s1"):
+    phases["S1352_s1"].append(("L1353_1352__outside", 0.00505))
+else:
+    phases["S1352_s1"] = [("L1353_1352__outside", 0.00505)]
+if phases.get("S6014_s2"):
+    phases["S6014_s2"].append(("L1353_6014__outside", 0.01714))
+else:
+    phases["S6014_s2"] = [("L1353_6014__outside", 0.01714)]
+if phases.get("S6014_s3"):
+    phases["S6014_s3"].append(("L1353_6014__outside", 0.01714))
+else:
+    phases["S6014_s3"] = [("L1353_6014__outside", 0.01714)]
+if phases.get("S1352_s0"):
+    phases["S1352_s0"].append(("L1867_1352__outside", 0.14744))
+else:
+    phases["S1352_s0"] = [("L1867_1352__outside", 0.14744)]
+if phases.get("S1352_s0"):
+    phases["S1352_s0"].append(("L1867_1352__outside", 0.25641))
+else:
+    phases["S1352_s0"] = [("L1867_1352__outside", 0.25641)]
+if phases.get("fake"):
+    phases["fake"].append(("L1867_3621__outside", 0.04833))
+else:
+    phases["fake"] = [("L1867_3621__outside", 0.04833)]
+if phases.get("fake"):
+    phases["fake"].append(("L1867_4574__outside", 0.46833))
+else:
+    phases["fake"] = [("L1867_4574__outside", 0.46833)]
+if phases.get("fake"):
+    phases["fake"].append(("L6013_5840__outside", 0.13833))
+else:
+    phases["fake"] = [("L6013_5840__outside", 0.13833)]
+if phases.get("S6014_s0"):
+    phases["S6014_s0"].append(("L6013_6014__outside", 0.31875))
+else:
+    phases[" "] = [("L6013_6014__outside", 0.31875)]
 
 
 
@@ -300,362 +651,6 @@ def init_intersections(): #TODO: Model intergreen
     intersections["S6013"] = ("S6013_s0", 0)
     intersections["S6014"] = ("S6014_s0", 0)
     return intersections
-
-
-def init_phases():
-    phases = {}
-    if phases.get("S1202_s0"):
-        phases["S1202_s0"].append(("L3966_1202__L1202_1349", 0.64522))
-    else:
-        phases["S1202_s0"] = [("L3966_1202__L1202_1349", 0.64522)]
-    if phases.get("S1202_s1"):
-        phases["S1202_s1"].append(("L3966_1202__L1202_1349", 0.64522))
-    else:
-        phases["S1202_s1"] = [("L3966_1202__L1202_1349", 0.64522)]
-    if phases.get("S1202_s2"):
-        phases["S1202_s2"].append(("L3966_1202__L1202_1349", 0.64522))
-    else:
-        phases["S1202_s2"] = [("L3966_1202__L1202_1349", 0.64522)]
-    if phases.get("S1202_s3"):
-        phases["S1202_s3"].append(("L3966_1202__L1202_1349", 0.64522))
-    else:
-        phases["S1202_s3"] = [("L3966_1202__L1202_1349", 0.64522)]
-    if phases.get("S1202_s6"):
-        phases["S1202_s6"].append(("L6013_1202__L1202_1349", 0.165))
-    else:
-        phases["S1202_s6"] = [("L6013_1202__L1202_1349", 0.165)]
-    if phases.get("S1202_s3"):
-        phases["S1202_s3"].append(("L1349_1202__L1202_3967", 0.825))
-    else:
-        phases["S1202_s3"] = [("L1349_1202__L1202_3967", 0.825)]
-    if phases.get("S1202_s4"):
-        phases["S1202_s4"].append(("L1349_1202__L1202_3967", 0.825))
-    else:
-        phases["S1202_s4"] = [("L1349_1202__L1202_3967", 0.825)]
-    if phases.get("S1202_s0"):
-        phases["S1202_s0"].append(("L6013_1202__L1202_3967", 0.41067))
-    else:
-        phases["S1202_s0"] = [("L6013_1202__L1202_3967", 0.41067)]
-    if phases.get("S1202_s1"):
-        phases["S1202_s1"].append(("L6013_1202__L1202_3967", 0.41067))
-    else:
-        phases["S1202_s1"] = [("L6013_1202__L1202_3967", 0.41067)]
-    if phases.get("S1202_s5"):
-        phases["S1202_s5"].append(("L6013_1202__L1202_3967", 0.41067))
-    else:
-        phases["S1202_s5"] = [("L6013_1202__L1202_3967", 0.41067)]
-    if phases.get("S1202_s6"):
-        phases["S1202_s6"].append(("L6013_1202__L1202_3967", 0.41067))
-    else:
-        phases["S1202_s6"] = [("L6013_1202__L1202_3967", 0.41067)]
-    if phases.get("S1202_s2"):
-        phases["S1202_s2"].append(("L1349_1202__L1202_6013", 0.11138))
-    else:
-        phases["S1202_s2"] = [("L1349_1202__L1202_6013", 0.11138)]
-    if phases.get("S1202_s3"):
-        phases["S1202_s3"].append(("L1349_1202__L1202_6013", 0.11138))
-    else:
-        phases["S1202_s3"] = [("L1349_1202__L1202_6013", 0.11138)]
-    if phases.get("S1202_s4"):
-        phases["S1202_s4"].append(("L1349_1202__L1202_6013", 0.11138))
-    else:
-        phases["S1202_s4"] = [("L1349_1202__L1202_6013", 0.11138)]
-    if phases.get("S1202_s0"):
-        phases["S1202_s0"].append(("L3966_1202__L1202_6013", 0.71739))
-    else:
-        phases["S1202_s0"] = [("L3966_1202__L1202_6013", 0.71739)]
-    if phases.get("fake"):
-        phases["fake"].append(("outside__L1216_1352", 0.075))
-    else:
-        phases["fake"] = [("outside__L1216_1352", 0.075)]
-    if phases.get("fake"):
-        phases["fake"].append(("outside__L1233_1352", 0.17667))
-    else:
-        phases["fake"] = [("outside__L1233_1352", 0.17667)]
-    if phases.get("S1349_s0"):
-        phases["S1349_s0"].append(("L1353_1349__L1349_1202", 0.01961))
-    else:
-        phases["S1349_s0"] = [("L1353_1349__L1349_1202", 0.01961)]
-    if phases.get("S1349_s3"):
-        phases["S1349_s3"].append(("L1353_1349__L1349_1202", 0.01961))
-    else:
-        phases["S1349_s3"] = [("L1353_1349__L1349_1202", 0.01961)]
-    if phases.get("S1349_s1"):
-        phases["S1349_s1"].append(("L1867_1349__L1349_1202", 0.79845))
-    else:
-        phases["S1349_s1"] = [("L1867_1349__L1349_1202", 0.79845)]
-    if phases.get("S1349_s2"):
-        phases["S1349_s2"].append(("L3621_1349__L1349_1202", 0.33333))
-    else:
-        phases["S1349_s2"] = [("L3621_1349__L1349_1202", 0.33333)]
-    if phases.get("S1349_s1"):
-        phases["S1349_s1"].append(("L1867_1349__L1349_1353", 0.03876))
-    else:
-        phases["S1349_s1"] = [("L1867_1349__L1349_1353", 0.03876)]
-    if phases.get("S1349_s3"):
-        phases["S1349_s3"].append(("L3621_1349__L1349_1353", 0.03333))
-    else:
-        phases["S1349_s3"] = [("L3621_1349__L1349_1353", 0.03333)]
-    if phases.get("S1349_s0"):
-        phases["S1349_s0"].append(("L1202_1349__L1349_1867", 0.73030))
-    else:
-        phases["S1349_s0"] = [("L1202_1349__L1349_1867", 0.73030)]
-    if phases.get("S1349_s1"):
-        phases["S1349_s1"].append(("L1202_1349__L1349_1867", 0.73030))
-    else:
-        phases["S1349_s1"] = [("L1202_1349__L1349_1867", 0.73030)]
-    if phases.get("S1349_s2"):
-        phases["S1349_s2"].append(("L1353_1349__L1349_1867", 0.35))
-    else:
-        phases["S1349_s2"] = [("L1353_1349__L1349_1867", 0.35)]
-    if phases.get("S1349_s0"):
-        phases["S1349_s0"].append(("L1202_1349__L1349_3621", 0.08))
-    else:
-        phases["S1349_s0"] = [("L1202_1349__L1349_3621", 0.08)]
-    if phases.get("S1349_s1"):
-        phases["S1349_s1"].append(("L1202_1349__L1349_3621", 0.08))
-    else:
-        phases["S1349_s1"] = [("L1202_1349__L1349_3621", 0.08)]
-    if phases.get("S1349_s3"):
-        phases["S1349_s3"].append(("L1353_1349__L1349_3621", 0.16667))
-    else:
-        phases["S1349_s3"] = [("L1353_1349__L1349_3621", 0.16667)]
-    if phases.get("S1349_s1"):
-        phases["S1349_s1"].append(("L1867_1349__L1349_3621", 0.00388))
-    else:
-        phases["S1349_s1"] = [("L1867_1349__L1349_3621", 0.00388)]
-    if phases.get("S1352_s1"):
-        phases["S1352_s1"].append(("L1233_1352__L1352_1353", 0.27778))
-    else:
-        phases["S1352_s1"] = [("L1233_1352__L1352_1353", 0.27778)]
-    if phases.get("S1352_s0"):
-        phases["S1352_s0"].append(("L1867_1352__L1352_1353", 0.08333))
-    else:
-        phases["S1352_s0"] = [("L1867_1352__L1352_1353", 0.08333)]
-    if phases.get("S1352_s0"):
-        phases["S1352_s0"].append(("L1216_1352__L1352_1867", 0.15385))
-    else:
-        phases["S1352_s0"] = [("L1216_1352__L1352_1867", 0.15385)]
-    if phases.get("S1352_s1"):
-        phases["S1352_s1"].append(("L1233_1352__L1352_1867", 0.19192))
-    else:
-        phases["S1352_s1"] = [("L1233_1352__L1352_1867", 0.19192)]
-    if phases.get("S1353_s0"):
-        phases["S1353_s0"].append(("L6014_1353__L1353_1349", 0.24643))
-    else:
-        phases["S1353_s0"] = [("L6014_1353__L1353_1349", 0.24643)]
-    if phases.get("S1353_s1"):
-        phases["S1353_s1"].append(("L6159_1353__L1353_1349", 0.0525))
-    else:
-        phases["S1353_s1"] = [("L6159_1353__L1353_1349", 0.0525)]
-    if phases.get("S1353_s1"):
-        phases["S1353_s1"].append(("L1349_1353__L1353_1352", 0.0075))
-    else:
-        phases["S1353_s1"] = [("L1349_1353__L1353_1352", 0.0075)]
-    if phases.get("S1353_s0"):
-        phases["S1353_s0"].append(("L6014_1353__L1353_1352", 0.075))
-    else:
-        phases["S1353_s0"] = [("L6014_1353__L1353_1352", 0.075)]
-    if phases.get("S1353_s1"):
-        phases["S1353_s1"].append(("L6159_1353__L1353_1352", 0.03))
-    else:
-        phases["S1353_s1"] = [("L6159_1353__L1353_1352", 0.03)]
-    if phases.get("S1353_s0"):
-        phases["S1353_s0"].append(("L1352_1353__L1353_6014", 0.48837))
-    else:
-        phases["S1353_s0"] = [("L1352_1353__L1353_6014", 0.48837)]
-    if phases.get("S1353_s2"):
-        phases["S1353_s2"].append(("L1352_1353__L1353_6014", 0.72414))
-    else:
-        phases["S1353_s2"] = [("L1352_1353__L1353_6014", 0.72414)]
-    if phases.get("S1867_s2"):
-        phases["S1867_s2"].append(("L1352_1867__L1867_1349", 0.33333))
-    else:
-        phases["S1867_s2"] = [("L1352_1867__L1867_1349", 0.33333)]
-    if phases.get("S1867_s2"):
-        phases["S1867_s2"].append(("L3621_1867__L1867_1349", 0.125))
-    else:
-        phases["S1867_s2"] = [("L3621_1867__L1867_1349", 0.125)]
-    if phases.get("S1867_s1"):
-        phases["S1867_s1"].append(("L4574_1867__L1867_1349", 0.73077))
-    else:
-        phases["S1867_s1"] = [("L4574_1867__L1867_1349", 0.73077)]
-    if phases.get("S1867_s0"):
-        phases["S1867_s0"].append(("L1349_1867__L1867_1352", 0.07547))
-    else:
-        phases["S1867_s0"] = [("L1349_1867__L1867_1352", 0.07547)]
-    if phases.get("S1867_s1"):
-        phases["S1867_s1"].append(("L1349_1867__L1867_1352", 0.07547))
-    else:
-        phases["S1867_s1"] = [("L1349_1867__L1867_1352", 0.07547)]
-    if phases.get("S1867_s2"):
-        phases["S1867_s2"].append(("L3621_1867__L1867_1352", 0.25))
-    else:
-        phases["S1867_s2"] = [("L3621_1867__L1867_1352", 0.25)]
-    if phases.get("S1867_s1"):
-        phases["S1867_s1"].append(("L4574_1867__L1867_1352", 0.03419))
-    else:
-        phases["S1867_s1"] = [("L4574_1867__L1867_1352", 0.03419)]
-    if phases.get("S1867_s2"):
-        phases["S1867_s2"].append(("L1352_1867__L1867_3621", 0.21875))
-    else:
-        phases["S1867_s2"] = [("L1352_1867__L1867_3621", 0.21875)]
-    if phases.get("S1867_s1"):
-        phases["S1867_s1"].append(("L4574_1867__L1867_3621", 0.04273))
-    else:
-        phases["S1867_s1"] = [("L4574_1867__L1867_3621", 0.04273)]
-    if phases.get("S1867_s0"):
-        phases["S1867_s0"].append(("L1349_1867__L1867_4574", 0.76730))
-    else:
-        phases["S1867_s0"] = [("L1349_1867__L1867_4574", 0.76730)]
-    if phases.get("S1867_s1"):
-        phases["S1867_s1"].append(("L1349_1867__L1867_4574", 0.76730))
-    else:
-        phases["S1867_s1"] = [("L1349_1867__L1867_4574", 0.76730)]
-    if phases.get("S1867_s2"):
-        phases["S1867_s2"].append(("L1352_1867__L1867_4574", 0.11458))
-    else:
-        phases["S1867_s2"] = [("L1352_1867__L1867_4574", 0.11458)]
-    if phases.get("S1867_s2"):
-        phases["S1867_s2"].append(("L3621_1867__L1867_4574", 0.21875))
-    else:
-        phases["S1867_s2"] = [("L3621_1867__L1867_4574", 0.21875)]
-    if phases.get("fake"):
-        phases["fake"].append(("outside__L3621_1867", 0.085))
-    else:
-        phases["fake"] = [("outside__L3621_1867", 0.085)]
-    if phases.get("fake"):
-        phases["fake"].append(("outside__L5840_6013", 0.08333))
-    else:
-        phases["fake"] = [("outside__L5840_6013", 0.08333)]
-    if phases.get("S6013_s2"):
-        phases["S6013_s2"].append(("L5840_6013__L6013_1202", 0.16667))
-    else:
-        phases["S6013_s2"] = [("L5840_6013__L6013_1202", 0.16667)]
-    if phases.get("S6013_s1"):
-        phases["S6013_s1"].append(("L6014_6013__L6013_1202", 0.51010))
-    else:
-        phases["S6013_s1"] = [("L6014_6013__L6013_1202", 0.51010)]
-    if phases.get("S6013_s0"):
-        phases["S6013_s0"].append(("L1202_6013__L6013_5840", 0.19774))
-    else:
-        phases["S6013_s0"] = [("L1202_6013__L6013_5840", 0.19774)]
-    if phases.get("S6013_s1"):
-        phases["S6013_s1"].append(("L1202_6013__L6013_5840", 0.19774))
-    else:
-        phases["S6013_s1"] = [("L1202_6013__L6013_5840", 0.19774)]
-    if phases.get("S6013_s1"):
-        phases["S6013_s1"].append(("L6014_6013__L6013_5840", 0.02020))
-    else:
-        phases["S6013_s1"] = [("L6014_6013__L6013_5840", 0.02020)]
-    if phases.get("S6013_s0"):
-        phases["S6013_s0"].append(("L1202_6013__L6013_6014", 0.14972))
-    else:
-        phases["S6013_s0"] = [("L1202_6013__L6013_6014", 0.14972)]
-    if phases.get("S6013_s1"):
-        phases["S6013_s1"].append(("L1202_6013__L6013_6014", 0.14972))
-    else:
-        phases["S6013_s1"] = [("L1202_6013__L6013_6014", 0.14972)]
-    if phases.get("S6013_s2"):
-        phases["S6013_s2"].append(("L5840_6013__L6013_6014", 0.06349))
-    else:
-        phases["S6013_s2"] = [("L5840_6013__L6013_6014", 0.06349)]
-    if phases.get("S6014_s0"):
-        phases["S6014_s0"].append(("L6013_6014__L6014_1353", 0.05625))
-    else:
-        phases["S6014_s0"] = [("L6013_6014__L6014_1353", 0.05625)]
-    if phases.get("S6014_s1"):
-        phases["S6014_s1"].append(("L6159_6014__L6014_1353", 0.4))
-    else:
-        phases["S6014_s1"] = [("L6159_6014__L6014_1353", 0.4)]
-    if phases.get("S6014_s3"):
-        phases["S6014_s3"].append(("L1353_6014__L6014_6013", 0.10714))
-    else:
-        phases["S6014_s3"] = [("L1353_6014__L6014_6013", 0.10714)]
-    if phases.get("S6014_s0"):
-        phases["S6014_s0"].append(("L6159_6014__L6014_6013", 0.37105))
-    else:
-        phases["S6014_s0"] = [("L6159_6014__L6014_6013", 0.37105)]
-    if phases.get("S6014_s1"):
-        phases["S6014_s1"].append(("L6159_6014__L6014_6013", 0.37105))
-    else:
-        phases["S6014_s1"] = [("L6159_6014__L6014_6013", 0.37105)]
-    if phases.get("fake"):
-        phases["fake"].append(("outside__L6159_1353", 0.01667))
-    else:
-        phases["fake"] = [("outside__L6159_1353", 0.01667)]
-    if phases.get("fake"):
-        phases["fake"].append(("outside__L6159_6014", 0.15167))
-    else:
-        phases["fake"] = [("outside__L6159_6014", 0.15167)]
-    if phases.get("fake"):
-        phases["fake"].append(("L1202_3967__outside", 0.49333))
-    else:
-        phases["fake"] = [("L1202_3967__outside", 0.49333)]
-    if phases.get("S1352_s0"):
-        phases["S1352_s0"].append(("L1216_1352__outside", 0.10256))
-    else: phases["S1352_s0"] = [("L1216_1352__outside", 0.10256)]
-    if phases.get("S1352_s1"):
-        phases["S1352_s1"].append(("L1233_1352__outside", 0.06061))
-    else:
-        phases["S1352_s1"] = [("L1233_1352__outside", 0.06061)]
-    if phases.get("S1353_s1"):
-        phases["S1353_s1"].append(("L1349_1353__outside", 0.045))
-    else:
-        phases["S1353_s1"] = [("L1349_1353__outside", 0.045)]
-    if phases.get("fake"):
-        phases["fake"].append(("L1349_3621__outside", 0.075))
-    else:
-        phases["fake"] = [("L1349_3621__outside", 0.075)]
-    if phases.get("S1353_s0"):
-        phases["S1353_s0"].append(("L1352_1353__outside", 0.19535))
-    else:
-        phases["S1353_s0"] = [("L1352_1353__outside", 0.19535)]
-    if phases.get("S1353_s2"):
-        phases["S1353_s2"].append(("L1352_1353__outside", 0.28966))
-    else:
-        phases["S1353_s2"] = [("L1352_1353__outside", 0.28966)]
-    if phases.get("S1352_s1"):
-        phases["S1352_s1"].append(("L1353_1352__outside", 0.05556))
-    else:
-        phases["S1352_s1"] = [("L1353_1352__outside", 0.05556)]
-    if phases.get("S1352_s1"):
-        phases["S1352_s1"].append(("L1353_1352__outside", 0.00505))
-    else:
-        phases["S1352_s1"] = [("L1353_1352__outside", 0.00505)]
-    if phases.get("S6014_s2"):
-        phases["S6014_s2"].append(("L1353_6014__outside", 0.01714))
-    else:
-        phases["S6014_s2"] = [("L1353_6014__outside", 0.01714)]
-    if phases.get("S6014_s3"):
-        phases["S6014_s3"].append(("L1353_6014__outside", 0.01714))
-    else:
-        phases["S6014_s3"] = [("L1353_6014__outside", 0.01714)]
-    if phases.get("S1352_s0"):
-        phases["S1352_s0"].append(("L1867_1352__outside", 0.14744))
-    else:
-        phases["S1352_s0"] = [("L1867_1352__outside", 0.14744)]
-    if phases.get("S1352_s0"):
-        phases["S1352_s0"].append(("L1867_1352__outside", 0.25641))
-    else:
-        phases["S1352_s0"] = [("L1867_1352__outside", 0.25641)]
-    if phases.get("fake"):
-        phases["fake"].append(("L1867_3621__outside", 0.04833))
-    else:
-        phases["fake"] = [("L1867_3621__outside", 0.04833)]
-    if phases.get("fake"):
-        phases["fake"].append(("L1867_4574__outside", 0.46833))
-    else:
-        phases["fake"] = [("L1867_4574__outside", 0.46833)]
-    if phases.get("fake"):
-        phases["fake"].append(("L6013_5840__outside", 0.13833))
-    else:
-        phases["fake"] = [("L6013_5840__outside", 0.13833)]
-    if phases.get("S6014_s0"):
-        phases["S6014_s0"].append(("L6013_6014__outside", 0.31875))
-    else:
-        phases[" "] = [("L6013_6014__outside", 0.31875)]
-    return phases
 
 
 def init_goal():
