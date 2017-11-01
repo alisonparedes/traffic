@@ -643,13 +643,13 @@ else:
 
 def init_intersections(): #TODO: Model intergreen
     intersections = {}
-    intersections["S1202"] = ("S1202_s0", 0)
-    intersections["S1349"] = ("S1349_s0", 0)
-    intersections["S1352"] = ("S1352_s0", 0)
-    intersections["S1353"] = ("S1353_s0", 0)
-    intersections["S1867"] = ("S1867_s0", 0)
-    intersections["S6013"] = ("S6013_s0", 0)
-    intersections["S6014"] = ("S6014_s0", 0)
+    intersections["S1202"] = ("S1202_s0", 30)
+    intersections["S1349"] = ("S1349_s0", 30)
+    intersections["S1352"] = ("S1352_s0", 30)
+    intersections["S1353"] = ("S1353_s0", 30)
+    intersections["S1867"] = ("S1867_s0", 30)
+    intersections["S6013"] = ("S6013_s0", 30)
+    intersections["S6014"] = ("S6014_s0", 30)
     return intersections
 
 

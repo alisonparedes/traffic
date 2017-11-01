@@ -6,6 +6,7 @@ import logging
 import time
 import os
 import state
+import transition
 
 
 def h(queues, intersections, goal):
@@ -15,19 +16,15 @@ def h(queues, intersections, goal):
     return h
 
 
-def min_local_f(current_queues, current_intersections, intersection, actions):
-    #for q in in_queues:
-    #    if current_state[q] > 0:
-    #        intervals.add(min(current_state[q], 25))
-    #with_intervals = itertools.product(domain[0], intervals)
-    interval = 100
+def local(current_queues, current_intersections, intersection, actions):
+    interval = 10
     min_f = []
     for phase in actions:
         successor_intersections = copy.copy(current_intersections)
-        successor_intersections[intersection] = phase
+        successor_intersections[intersection] = (phase, current_intersections[intersection][1] + interval)
         active_flows = state.get_rates(current_intersections, interval)
-        max_flows = active_flows  #TODO: Call Gurobi
-        successor_queues = state.simulate(current_queues, active_flows)
+        max_flows = transition.maximize_flows(active_flows)
+        successor_queues = state.simulate(current_queues, max_flows)
         improved_h = h(successor_queues, successor_intersections, goal)
         cost = 1
         f = cost + improved_h
@@ -41,21 +38,6 @@ def min_local_f(current_queues, current_intersections, intersection, actions):
     except IndexError:
         next_best_phase = None
     return best_phase, next_best_phase
-
-
-'''
-def simulate(current_state, assignments, interval):
-    successor_state = copy.copy(current_state)
-    for phase in assignments:
-        if phase:
-            in_queue = phase[1][0]
-            out_queue = phase[1][1]
-            rate = phase[1][2]
-            change = min(current_state[in_queue], interval * rate, 10)
-            successor_state[in_queue] -= change
-            successor_state[out_queue] += change
-    return successor_state
-'''
 
 
 def visited_h(alternatives, current_state, visited, max_interval, best):
@@ -74,21 +56,19 @@ def visited_h(alternatives, current_state, visited, max_interval, best):
     return min_h
 
 
-def min_f(current_queues, current_intersections):
+def search(current_queues, current_intersections):
     assignment = []
     alternatives = []
-    max_interval = 0
+    max_interval = 10
     for intersection, actions in state.applicable_actions(current_intersections).iteritems():
-        best, next_best = min_local_f(current_queues, current_intersections, intersection, actions)
-        #if best:
-            #interval = best[1][3]
-            #if interval > max_interval:
-            #    max_interval = interval
+        best, next_best = local(current_queues, current_intersections, intersection, actions)
         assignment.append(best)
         alternatives.append(next_best)
     cost = 1
-    next_best_h = cost + visited_h(alternatives, current_state, visited, max_interval, assignment)
+    next_best_h = cost + 1 #visited_h(alternatives, current_state, visited, max_interval, assignment)
+    print assignment
     return assignment, next_best_h, max_interval
+
 
 def sum_queues(initial_state):
     queues_sum = 0
@@ -96,21 +76,23 @@ def sum_queues(initial_state):
         queues_sum += queue
     return queues_sum
 
+
 def rta_star(initial_queues, initial_intersections):
     current_queues = initial_queues
     current_intersections = initial_intersections
     execution_time = 0
     max_search_time = 0
+    interval = 10
     print(current_queues)
     print(goal)
     while not state.is_goal(goal, current_queues):
         start_time = time.clock()
-        best, new_h = min_f(current_queues, current_intersections)  #TODO: Put interval back
+        best, new_h = search(current_queues, current_intersections)
         end_time = time.clock()-start_time
         if end_time > max_search_time:
             max_search_time = end_time
-        visited[tuple(current_state[1:])] = new_h
-        successor_state = simulate(current_state, best, interval)
+        #visited[tuple(current_state[1:])] = new_h  #TODO: Hash new state model
+        successor_state = state.simulate(current_state, next_best, max(max_interval, interval))
         #print(h(successor_state, visited), new_h)
         current_state = successor_state
         #print(visited)
@@ -121,6 +103,7 @@ def rta_star(initial_queues, initial_intersections):
     print(current_state)
     print("execution time (seconds): {0}".format(execution_time))
     print("max search time per iteration (seconds): {0}".format(max_search_time))
+
 
 def quick_domain(in_queues, out_queues, exceptions):
     rates = (1, )
