@@ -39,6 +39,15 @@ def local(current_queues, current_intersections, intersection, actions):
         next_best_phase = None
     return best_phase, next_best_phase
 
+def get_intersection(best):
+    f = best[0]
+    intersection, phase = best[1]
+    return intersection
+
+def get_phase(best):
+    f = best[0]
+    intersection, phase = best[1]
+    return phase
 
 def visited_h(alternatives, current_state, visited, max_interval, best):
     min_h = float("inf")
@@ -57,52 +66,54 @@ def visited_h(alternatives, current_state, visited, max_interval, best):
 
 
 def search(current_queues, current_intersections):
-    assignment = []
+    next_intersections = {}
     alternatives = []
     max_interval = 10
     for intersection, actions in state.applicable_actions(current_intersections).iteritems():
         best, next_best = local(current_queues, current_intersections, intersection, actions)
-        assignment.append(best)
+        current_phase = current_intersections[intersection][0]
+        current_time = current_intersections[intersection][1]
+        next_phase = get_phase(best)
+        new_time = current_time + max_interval
+        if next_phase != current_phase:
+            new_time = max_interval
+        next_intersections[intersection] = (next_phase, new_time)
         alternatives.append(next_best)
     cost = 1
     next_best_h = cost + 1 #visited_h(alternatives, current_state, visited, max_interval, assignment)
-    print assignment
-    return assignment, next_best_h, max_interval
+    return next_intersections, next_best_h
 
-
-def sum_queues(initial_state):
-    queues_sum = 0
-    for queue in initial_state[1:]:
-        queues_sum += queue
-    return queues_sum
 
 
 def rta_star(initial_queues, initial_intersections):
     current_queues = initial_queues
     current_intersections = initial_intersections
-    execution_time = 0
-    max_search_time = 0
+    #execution_time = 0
+    #max_search_time = 0
     interval = 10
-    print(current_queues)
-    print(goal)
+    #print(current_queues)
+    #print(goal)
     while not state.is_goal(goal, current_queues):
-        start_time = time.clock()
-        best, new_h = search(current_queues, current_intersections)
-        end_time = time.clock()-start_time
-        if end_time > max_search_time:
-            max_search_time = end_time
-        #visited[tuple(current_state[1:])] = new_h  #TODO: Hash new state model
-        successor_state = state.simulate(current_state, next_best, max(max_interval, interval))
+        #start_time = time.clock()
+        next_intersections, new_h = search(current_queues, current_intersections)
+        #end_time = time.clock()-start_time
+        #if end_time > max_search_time:
+        #    max_search_time = end_time
+        #print(next_intersections)
+        max_flows = transition.maximize_flows(state.get_rates(next_intersections))
+        visited[(tuple(current_queues), tuple(current_intersections))] = new_h
+        next_queues = state.simulate(current_queues, max_flows)
+        current_queues = next_queues
+        current_intersections = next_intersections
         #print(h(successor_state, visited), new_h)
-        current_state = successor_state
         #print(visited)
-        execution_time += interval
-        print(best)
-        #print(current_state)
+        #execution_time += interval
+        print(next_intersections)
+        #print(current_queues)
         #print("max search time per iteration so far (seconds): {0}".format(max_search_time))
-    print(current_state)
-    print("execution time (seconds): {0}".format(execution_time))
-    print("max search time per iteration (seconds): {0}".format(max_search_time))
+    #print(current_state)
+    #print("execution time (seconds): {0}".format(execution_time))
+    #print("max search time per iteration (seconds): {0}".format(max_search_time))
 
 
 def quick_domain(in_queues, out_queues, exceptions):

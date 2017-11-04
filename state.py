@@ -11,6 +11,7 @@ def simulate(queues, max_flows):
         new_queues[out_queue] = queues[out_queue] + change
     return new_queues
 
+
 phase_max = {}
 phase_min = {}
 phase_intergreen = {}
