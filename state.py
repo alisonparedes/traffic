@@ -162,19 +162,29 @@ phase_cycles["S1867_s0"] = "S1867_s1"
 phase_cycles["S1867_s1"] = "S1867_s2"
 phase_cycles["S1867_s2"] = "S1867_s0"
 
-def applicable_actions(intersections):
+def applicable_actions(intersections, cycles=True):
     applicable = {}
-    for intersection, state in intersections.iteritems():  #TODO: How does intergreen affect rates and applicable acitons?
-        phase = state[0]
-        phase_time = state[1]
-        #intergreen_ind = state[2]
-        #int_time = state[3]
-        if not applicable.get(intersection):
+
+    if cycles:
+        for intersection, state in intersections.iteritems():  #TODO: How does intergreen affect rates and applicable acitons?
+            phase = state[0]
+            phase_time = state[1]
+            #intergreen_ind = state[2]
+            #int_time = state[3]
+            if not applicable.get(intersection):
+                applicable[intersection] = []
+            if phase_time > phase_min[phase]:
+                applicable[intersection].append(phase_cycles[phase])
+            if phase_time < phase_max[phase]:
+                applicable[intersection].append(phase)
+    else:
+        for intersection in intersections.iterkeys():
             applicable[intersection] = []
-        if phase_time > phase_min[phase]:
-            applicable[intersection].append(phase_cycles[phase])
-        if phase_time < phase_max[phase]:
-            applicable[intersection].append(phase)
+            for i in range(0, 6):
+                phase = "{0}_s{1}".format(intersection, i)
+                if phases.get(phase):
+                    applicable[intersection].append(phase)
+
     return applicable
 
 
