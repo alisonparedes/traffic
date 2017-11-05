@@ -1,14 +1,54 @@
 from copy import copy
 import numpy
 
+queue_capacity = {}
+queue_capacity["L1202_1349"] = 88
+queue_capacity["L1202_3967"] = 138
+queue_capacity["L1202_6013"] = 61
+queue_capacity["L1216_1352"] = 13
+queue_capacity["L1233_1352"] = 30
+queue_capacity["L1349_1202"] = 89
+queue_capacity["L1349_1353"] = 78
+queue_capacity["L1349_1867"] = 63
+queue_capacity["L1349_3621"] = 181
+queue_capacity["L1352_1353"] = 60
+queue_capacity["L1352_1867"] = 73
+queue_capacity["L1353_1349"] = 88
+queue_capacity["L1353_1352"] = 119
+queue_capacity["L1353_6014"] = 24
+queue_capacity["L1867_1349"] = 104
+queue_capacity["L1867_1352"] = 128
+queue_capacity["L1867_3621"] = 19
+queue_capacity["L1867_3621"] = 62
+queue_capacity["L1867_4574"] = 82
+queue_capacity["L3621_1349"] = 75
+queue_capacity["L3621_1867"] = 60
+queue_capacity["L3966_1202"] = 101
+queue_capacity["L4574_1867"] = 179
+queue_capacity["L5840_6013"] = 40
+queue_capacity["L6013_1202"] = 35
+queue_capacity["L6013_5840"] = 24
+queue_capacity["L6013_6014"] = 94
+queue_capacity["L6014_1353"] = 23
+queue_capacity["L6014_6013"] = 94
+queue_capacity["L6159_1353"] = 24
+queue_capacity["L6159_6014"] = 218
+
+
+def within_capacity(queues):
+    print("checking load ...")
+    for q, load in queues.iteritems():
+        if q != "outside":
+            if load >= queue_capacity[q]:
+                print(q, load, queue_capacity[q])
 
 def simulate(queues, max_flows):
     new_queues = copy(queues)
     for flow, rate in max_flows.iteritems():
         in_queue, out_queue = edges[flow]
-        change = min(queues[in_queue], rate)  # TODO: I want to think there is a better way to simulate this
-        new_queues[in_queue] = queues[in_queue] - change
-        new_queues[out_queue] = queues[out_queue] + change
+        change = rate
+        new_queues[in_queue] = new_queues[in_queue] - change
+        new_queues[out_queue] = new_queues[out_queue] + change
     return new_queues
 
 
@@ -160,7 +200,7 @@ def is_goal(goal, queues):
     return True
 
 
-def get_rates(intersections, interval=100):
+def get_rates(intersections, interval=10):
     rates = {}
     for flow in edges.iterkeys():
         rates[flow] = 0.0

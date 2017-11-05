@@ -17,13 +17,14 @@ def h(queues, intersections, goal):
 
 
 def local(current_queues, current_intersections, intersection, actions):
-    interval = 10
+    interval = 100
     min_f = []
     for phase in actions:
         successor_intersections = copy.copy(current_intersections)
         successor_intersections[intersection] = (phase, current_intersections[intersection][1] + interval)
         active_flows = state.get_rates(current_intersections, interval)
-        max_flows = transition.maximize_flows(active_flows)
+        #print(active_flows)
+        max_flows = transition.maximize_flows(active_flows, current_queues)
         successor_queues = state.simulate(current_queues, max_flows)
         improved_h = h(successor_queues, successor_intersections, goal)
         cost = 1
@@ -68,7 +69,7 @@ def visited_h(alternatives, current_state, visited, max_interval, best):
 def search(current_queues, current_intersections):
     next_intersections = {}
     alternatives = []
-    max_interval = 10
+    max_interval = 100
     for intersection, actions in state.applicable_actions(current_intersections).iteritems():
         best, next_best = local(current_queues, current_intersections, intersection, actions)
         current_phase = current_intersections[intersection][0]
@@ -90,7 +91,7 @@ def rta_star(initial_queues, initial_intersections):
     current_intersections = initial_intersections
     #execution_time = 0
     #max_search_time = 0
-    interval = 10
+    interval = 100
     #print(current_queues)
     #print(goal)
     while not state.is_goal(goal, current_queues):
@@ -100,15 +101,20 @@ def rta_star(initial_queues, initial_intersections):
         #if end_time > max_search_time:
         #    max_search_time = end_time
         #print(next_intersections)
-        max_flows = transition.maximize_flows(state.get_rates(next_intersections))
+        rates = state.get_rates(next_intersections, interval)
+        #print(current_queues)
+        state.within_capacity(current_queues)
+        max_flows = transition.maximize_flows(rates, current_queues)
+        #print(max_flows)
         visited[(tuple(current_queues), tuple(current_intersections))] = new_h
         next_queues = state.simulate(current_queues, max_flows)
         current_queues = next_queues
+
         current_intersections = next_intersections
         #print(h(successor_state, visited), new_h)
         #print(visited)
         #execution_time += interval
-        print(next_intersections)
+        #print(next_intersections)
         #print(current_queues)
         #print("max search time per iteration so far (seconds): {0}".format(max_search_time))
     #print(current_state)
