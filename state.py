@@ -35,12 +35,11 @@ queue_capacity["L6159_1353"] = 24
 queue_capacity["L6159_6014"] = 218
 
 
-def within_capacity(queues):
-    print("checking load ...")
-    for q, load in queues.iteritems():
-        if q != "outside":
-            if load >= queue_capacity[q]:
-                print(q, load, queue_capacity[q])
+def print_change(from_queues, to_queues):
+    print("change...")
+    for q, load in from_queues.iteritems():
+        if load != to_queues[q]:
+            print(q, from_queues[q], to_queues[q])
 
 def simulate(queues, max_flows):
     new_queues = copy(queues)

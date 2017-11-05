@@ -646,7 +646,7 @@ def maximize_flows(rates={}, queues={}):
     m.addConstr(fkj <= 10)
     '''
 
-    #m.Params.outputFlag = 0  # Suppress logging
+    m.Params.outputFlag = 0  # Suppress logging
     m.optimize()
 
     max_flow = {}

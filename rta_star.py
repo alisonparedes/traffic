@@ -103,14 +103,14 @@ def rta_star(initial_queues, initial_intersections):
         #print(next_intersections)
         rates = state.get_rates(next_intersections, interval)
         #print(current_queues)
-        state.within_capacity(current_queues)
         max_flows = transition.maximize_flows(rates, current_queues)
         #print(max_flows)
         visited[(tuple(current_queues), tuple(current_intersections))] = new_h
         next_queues = state.simulate(current_queues, max_flows)
+        state.print_change(current_queues, next_queues)
         current_queues = next_queues
-
         current_intersections = next_intersections
+
         #print(h(successor_state, visited), new_h)
         #print(visited)
         #execution_time += interval
