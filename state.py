@@ -41,6 +41,14 @@ def print_change(from_queues, to_queues):
         if load != to_queues[q]:
             print(q, from_queues[q], to_queues[q])
 
+
+def sum_load(queues):
+    s = 0
+    for load in queues.itervalues():
+        s += load
+    return s
+
+
 def simulate(queues, max_flows):
     new_queues = copy(queues)
     for flow, rate in max_flows.iteritems():
@@ -162,11 +170,11 @@ phase_cycles["S1867_s0"] = "S1867_s1"
 phase_cycles["S1867_s1"] = "S1867_s2"
 phase_cycles["S1867_s2"] = "S1867_s0"
 
-def applicable_actions(intersections, cycles=True):
+def applicable_actions(intersections, cycles=False):
     applicable = {}
 
     if cycles:
-        for intersection, state in intersections.iteritems():  #TODO: How does intergreen affect rates and applicable acitons?
+        for intersection, state in intersections.iteritems():
             phase = state[0]
             phase_time = state[1]
             #intergreen_ind = state[2]
@@ -186,6 +194,12 @@ def applicable_actions(intersections, cycles=True):
                     applicable[intersection].append(phase)
 
     return applicable
+
+
+
+
+def get_intergreen(phase):
+    return phase_intergreen.get(phase, 0)
 
 
 def heuristic(queues, goal):
@@ -209,13 +223,18 @@ def is_goal(goal, queues):
     return True
 
 
-def get_rates(intersections, interval=10):
+def get_rates(current_intersections, previous_intersections={}, interval=10):
     rates = {}
     for flow in edges.iterkeys():
         rates[flow] = 0.0
-    for phase, _ in intersections.itervalues():
-        for flow, rate in phases[phase]:
-            rates[flow] = rate * interval
+    for intersection, phase in current_intersections.iteritems():
+        phase_name = phase[0]
+        previous_phase = previous_intersections[intersection][0]
+        intergreen = 0
+        if phase_name != previous_phase:
+            intergreen = get_intergreen(previous_phase)
+        for flow, rate in phases[phase_name]:
+            rates[flow] = rate * (interval - min(intergreen, interval))
     for flow, rate in phases["fake"]:  # Because some flows are always on
         rates[flow] = rate * interval
     return rates
