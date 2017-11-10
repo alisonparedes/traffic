@@ -87,7 +87,8 @@ def leader_first(current_queues, current_intersections, interval=10):
             active_flows = state.get_rates(try_intersections, successor_intersections, interval)
             max_flows = transition.maximize_flows(active_flows, successor_queues)
             try_queues = state.simulate(successor_queues, max_flows)
-            try_h = state.heuristic(try_queues, goal)
+            try_h = visited.get(classify_state(try_intersections), state.heuristic(try_queues, goal))
+            #try_h = state.heuristic(try_queues, goal)
             #print(try_h)
             if try_h < next_best_h:
                 next_best_h = try_h
@@ -98,22 +99,26 @@ def leader_first(current_queues, current_intersections, interval=10):
     return successor_intersections, next_best_h
 
 
+def classify_state(intersections):
+    return tuple(x for x, y in intersections.itervalues())
+
+
 def rta_star(initial_queues, initial_intersections):
     current_queues = initial_queues
     current_intersections = initial_intersections
     execution_time = 0
     #max_search_time = 0
     interval = 10
-    #search = leader_first
+    search = leader_first
     #search = random_next
-    search = breadth_first_d1
+    #search = breadth_first_d1
     #print(current_queues)
     #print(goal)
     while not state.is_goal(goal, current_queues):
         start_time = time.clock()
         next_intersections, new_h = search(current_queues, current_intersections)
         end_time = time.clock()-start_time
-        print(current_queues)
+        hashable = classify_state(current_intersections)
         #if end_time > max_search_time:
         #    max_search_time = end_time
         #print(next_intersections)
@@ -124,6 +129,7 @@ def rta_star(initial_queues, initial_intersections):
         next_queues = state.simulate(current_queues, max_flows)
         #print(next_intersections)
         #state.print_change(current_queues, next_queues)
+        visited[hashable] = new_h + 1
         current_queues = next_queues
         current_intersections = next_intersections
         #print(state.heuristic(next_queues, goal))
