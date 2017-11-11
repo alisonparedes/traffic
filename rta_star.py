@@ -25,7 +25,7 @@ def get_phase(best):
 def random_next(current_queues, current_intersections, interval=10):
     next_intersections = copy.copy(current_intersections)
     next_best_h = float("inf")
-    actions = state.applicable_actions(current_intersections)
+    actions = state.applicable_actions(current_intersections, cycles=True)
     for intersection, domain in actions.iteritems():
         apply = random.randint(0, len(domain)-1)
         current_phase = current_intersections[intersection][0]
@@ -42,7 +42,7 @@ def breadth_first_d1(current_queues, current_intersections, interval=10):
     next_best_h = float("inf")
     best_h = float("inf")
     #print(next_best_h)
-    actions = state.applicable_actions(current_intersections)
+    actions = state.applicable_actions(current_intersections, cycles=True)
     next_states = itertools.product(*actions.itervalues())
     for try_state in next_states:
         try_intersections = copy.copy(current_intersections)
@@ -63,6 +63,91 @@ def breadth_first_d1(current_queues, current_intersections, interval=10):
             best_h = try_h
             next_intersections = try_intersections
             #print(next_best_h)
+    return next_intersections, next_best_h
+
+
+
+def prev_duration(intersection, new_phase, current_intersections):
+    current_phase = current_intersections[intersection][0]
+    if new_phase != current_phase:
+        return 0
+    current_duration = current_intersections[intersection][1]
+    return current_duration
+
+
+def breadth_first_d2(current_queues, current_intersections, interval=10):
+    next_intersections = copy.copy(current_intersections)
+    next_best_h = float("inf")
+    best_h = float("inf")
+    depth_1 = expand(current_queues, current_intersections, interval)
+    depth_2 = []
+    for current_intersections, current_queues, _ in depth_1:
+        depth_2 += expand(current_queues, current_intersections, interval)
+    for _, try_queues, try_intersections in depth_2:
+        try_h = state.heuristic(try_queues, goal)
+        if try_h < best_h:
+            next_best_h = best_h
+            best_h = try_h
+            next_intersections = try_intersections
+    return next_intersections, next_best_h
+
+
+def expand(current_queues, current_intersections, interval):
+    generated = []
+    actions = state.applicable_actions(current_intersections, cycles=True)
+    next_states = itertools.product(*actions.itervalues())
+    for try_state in next_states:
+        try_intersections = copy.copy(current_intersections)
+        for phase in try_state:
+            intersection = phase[0:5]
+            try_intersections[intersection] = (phase, prev_duration(intersection, phase, current_intersections) + interval)
+        active_flows = state.get_rates(try_intersections, current_intersections, interval)
+        max_flows = transition.maximize_flows(active_flows, current_queues)
+        try_queues = state.simulate(current_queues, max_flows)
+        generated.append((try_intersections, try_queues, current_intersections))
+    return generated
+
+
+def expand_b8(current_queues, current_intersections, interval):
+    generated = []
+    actions = state.applicable_actions(current_intersections, cycles=True)
+    must_intersections = {intersection: (phase[0], phase[1] + interval) for intersection, phase in current_intersections.iteritems()}
+    for intersection, phases in actions.iteritems():
+        if len(phases) == 1:
+            must_intersections[intersection] = (phases[0], prev_duration(intersection, phases[0], current_intersections) + interval)
+    for intersection, phases in actions.iteritems():
+        for phase in phases:
+            if phase != must_intersections[intersection][0]:
+                try_intersections = copy.copy(must_intersections)
+                try_intersections[intersection] = (phase, prev_duration(intersection, phase, current_intersections) + interval)
+                active_flows = state.get_rates(try_intersections, current_intersections, interval)
+                max_flows = transition.maximize_flows(active_flows, current_queues)
+                try_queues = state.simulate(current_queues, max_flows)
+                generated.append((try_intersections, try_queues, current_intersections))
+
+    if len(generated) == 0:
+        active_flows = state.get_rates(must_intersections, current_intersections, interval)
+        max_flows = transition.maximize_flows(active_flows, current_queues)
+        try_queues = state.simulate(current_queues, max_flows)
+        generated.append((must_intersections, try_queues, current_intersections))
+
+    return generated
+
+
+def breadth_first_b8(current_queues, current_intersections, interval=10):
+    next_intersections = copy.copy(current_intersections)
+    next_best_h = float("inf")
+    best_h = float("inf")
+    depth_1 = expand_b8(current_queues, current_intersections, interval)
+    depth_2 = []
+    for d1_intersections, d1_queues, _ in depth_1:
+        depth_2 += expand_b8(d1_queues, d1_intersections, interval)
+    for _, try_queues, try_intersections in depth_2:
+        try_h = state.heuristic(try_queues, goal)
+        if try_h < best_h:
+            next_best_h = best_h
+            best_h = try_h
+            next_intersections = try_intersections
     return next_intersections, next_best_h
 
 
@@ -103,15 +188,17 @@ def classify_state(intersections):
     return tuple(x for x, y in intersections.itervalues())
 
 
-def rta_star(initial_queues, initial_intersections):
+def rta_star(initial_queues, initial_intersections, search=random_next):
     current_queues = initial_queues
     current_intersections = initial_intersections
     execution_time = 0
     #max_search_time = 0
     interval = 10
-    search = leader_first
+    #search = leader_first
     #search = random_next
     #search = breadth_first_d1
+    #search = breadth_first_d2
+    #search = breadth_first_b8
     #print(current_queues)
     #print(goal)
     while not state.is_goal(goal, current_queues):
@@ -119,8 +206,7 @@ def rta_star(initial_queues, initial_intersections):
         next_intersections, new_h = search(current_queues, current_intersections)
         end_time = time.clock()-start_time
         hashable = classify_state(current_intersections)
-        #if end_time > max_search_time:
-        #    max_search_time = end_time
+        #print(end_time)
         #print(next_intersections)
         rates = state.get_rates(next_intersections, current_intersections, interval)
         #print(current_queues)
@@ -139,8 +225,9 @@ def rta_star(initial_queues, initial_intersections):
         #print(current_queues)
         #print("max search time per iteration so far (seconds): {0}".format(max_search_time))
     #print(current_state)
-    print("execution time (seconds): {0}".format(execution_time))
+    #print("execution time (seconds): {0}".format(execution_time))
     #print("max search time per iteration (seconds): {0}".format(max_search_time))
+    return execution_time
 
 
 def quick_domain(in_queues, out_queues, exceptions):
@@ -177,10 +264,76 @@ if __name__ == "__main__":
     queues = 35 + sink
     #print(domains)
     '''
-    queues, intersections, goal = state.init_problem()
-    #print(current_state)
-    #print(actions)
-    #print(goal)
+    import datetime
+    #a, b, c, search_alg = 300.0, 152.0, 357.0, breadth_first_d1
+    #a, b, c, search_alg = 200, 152.0, 357.0, breadth_first_d1
+    #a, b, c, search_alg = 891, 75, 34, breadth_first_d1
+    #a, b, c, search_alg = 411, 539, 50, breadth_first_d1
+    #a, b, c, search_alg = 487, 491, 22, breadth_first_d1
+    #a, b, c, search_alg = 149, 572, 279, breadth_first_d1
+    #a, b, c, search_alg = 835, 39, 126, breadth_first_d1
+    #a, b, c, search_alg = 388, 252, 360, breadth_first_d1
+    #a, b, c, search_alg = 178, 660, 162, breadth_first_d1
+    #a, b, c, search_alg = 266, 317, 417, breadth_first_d1
+    #a, b, c, search_alg = 940, 13, 47, breadth_first_d1
+    #a, b, c, search_alg = 763, 122, 115, breadth_first_d1
+    #a, b, c, search_alg = 491, 45, 464, breadth_first_d1
+    #a, b, c, search_alg = 568, 327, 105, breadth_first_d1
+    #a, b, c, search_alg = 713, 92, 195, breadth_first_d1
+    #a, b, c, search_alg = 401, 98, 501, breadth_first_d1
+    #a, b, c, search_alg = 308, 327, 365, breadth_first_d1
+    #a, b, c, search_alg = 862, 48, 90, breadth_first_d1
+    #a, b, c, search_alg = 133, 209, 658, breadth_first_d1
+    #a, b, c, search_alg = 456, 421, 123, breadth_first_d1
+    #a, b, c, search_alg = 44, 32, 924, breadth_first_d1
+
+
+    #a, b, c, search_alg = 200, 152.0, 357.0, random_next
+    #a, b, c, search_alg = 891, 75, 34, random_next
+    #a, b, c, search_alg = 411, 539, 50, random_next
+    #a, b, c, search_alg = 487, 491, 22, random_next
+    #a, b, c, search_alg = 149, 572, 279, random_next
+    #a, b, c, search_alg = 835, 39, 126, random_next
+    #a, b, c, search_alg = 388, 252, 360, random_next
+    #a, b, c, search_alg = 178, 660, 162, random_next
+    #a, b, c, search_alg = 266, 317, 417, random_next
+    #a, b, c, search_alg = 940, 13, 47, random_next
+    #a, b, c, search_alg = 763, 122, 115, random_next
+    #a, b, c, search_alg = 491, 45, 464, random_next
+    #a, b, c, search_alg = 568, 327, 105, random_next
+    #a, b, c, search_alg = 713, 92, 195, random_next
+    #a, b, c, search_alg = 401, 98, 501, random_next
+    #a, b, c, search_alg = 308, 327, 365, random_next
+    #a, b, c, search_alg = 862, 48, 90, random_next
+    #a, b, c, search_alg = 133, 209, 658, random_next
+    #a, b, c, search_alg = 456, 421, 123, random_next
+    #a, b, c, search_alg = 44, 32, 924, random_next
+
+
+    #a, b, c, search_alg = 200, 152.0, 357.0, breadth_first_b8
+    #a, b, c, search_alg = 891, 75, 34, breadth_first_b8
+    #a, b, c, search_alg = 411, 539, 50, breadth_first_b8
+    #a, b, c, search_alg = 487, 491, 22, breadth_first_b8
+    #a, b, c, search_alg = 149, 572, 279, breadth_first_b8
+    #a, b, c, search_alg = 835, 39, 126, breadth_first_b8
+    #a, b, c, search_alg = 388, 252, 360, breadth_first_b8
+    #a, b, c, search_alg = 178, 660, 162, breadth_first_b8
+    #a, b, c, search_alg = 266, 317, 417, breadth_first_b8
+    #a, b, c, search_alg = 940, 13, 47, breadth_first_b8
+    #a, b, c, search_alg = 763, 122, 115, breadth_first_b8
+    #a, b, c, search_alg = 491, 45, 464, breadth_first_b8
+    #a, b, c, search_alg = 568, 327, 105, breadth_first_b8
+    #a, b, c, search_alg = 713, 92, 195, breadth_first_b8
+    #a, b, c, search_alg = 401, 98, 501, breadth_first_b8
+    #a, b, c, search_alg = 308, 327, 365, breadth_first_b8
+    #a, b, c, search_alg = 862, 48, 90, breadth_first_b8
+    #a, b, c, search_alg = 133, 209, 658, breadth_first_b8
+    #a, b, c, search_alg = 456, 421, 123, breadth_first_b8
+    a, b, c, search_alg = 44, 32, 924, breadth_first_b8
+
+    queues, intersections, goal = state.init_problem(a, b, c)
     visited = dict()
-    rta_star(queues, intersections)
+    execution_time = rta_star(queues, intersections, search_alg)
+    print "{0}, {1}, {2}, {3}, {4}".format(a, b, c, search_alg.__name__, execution_time)
+
 

@@ -240,24 +240,24 @@ def get_rates(current_intersections, previous_intersections={}, interval=10):
     return rates
 
 
-def init_problem():
-    queues = init_queues()
+def init_problem(a, b, c):
+    queues = init_queues(a, b, c)
     intersections = init_intersections()
     goal = init_goal()
     return queues, intersections, goal
 
 
-def init_queues():
+def init_queues(a=300.0, b=152.0, c=357.0):
     queues = {}
     queues["L6013_1202"] = 0.0
-    queues["L3966_1202"] = 300.0
+    queues["L3966_1202"] = a #300.0  # Initially 300.0 per PDDL, capacity is 101
     queues["L1202_3967"] = 11.0
     queues["L1202_6013"] = 8.0
     queues["L1349_3621"] = 0.0
     queues["L1867_1349"] = 59.0
     queues["L1353_1349"] = 0.0
     queues["L1349_1353"] = 0.0
-    queues["L3621_1349"] = 152.0
+    queues["L3621_1349"] = b #152.0  # Initially 152.0 per PDDL, capacity is 75
     queues["L1349_1867"] = 3.0
     queues["L6159_6014"] = 15.0
     queues["L6013_6014"] = 14.0
@@ -272,7 +272,7 @@ def init_queues():
     queues["L1867_1352"] = 4.0
     queues["L1867_3621"] = 0.0
     queues["L3621_1867"] = 29.0
-    queues["L4574_1867"] = 357.0
+    queues["L4574_1867"] = c #357.0  # Initially 357.0 per PDDL, capacity is 179
     queues["L1867_4574"] = 5.0
     queues["L1233_1352"] = 16.0
     queues["L1216_1352"] = 10.0
@@ -712,13 +712,13 @@ else:
 
 def init_intersections(): #TODO: Model intergreen
     intersections = {}
-    intersections["S1202"] = ("S1202_s0", 30)
-    intersections["S1349"] = ("S1349_s0", 30)
-    intersections["S1352"] = ("S1352_s0", 30)
-    intersections["S1353"] = ("S1353_s0", 30)
-    intersections["S1867"] = ("S1867_s0", 30)
-    intersections["S6013"] = ("S6013_s0", 30)
-    intersections["S6014"] = ("S6014_s0", 30)
+    intersections["S1202"] = ("S1202_s0", 0)
+    intersections["S1349"] = ("S1349_s0", 0)
+    intersections["S1352"] = ("S1352_s0", 0)
+    intersections["S1353"] = ("S1353_s0", 0)
+    intersections["S1867"] = ("S1867_s0", 0)
+    intersections["S6013"] = ("S6013_s0", 0)
+    intersections["S6014"] = ("S6014_s0", 0)
     return intersections
 
 
