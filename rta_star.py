@@ -103,6 +103,46 @@ def prev_duration(intersection, new_phase, current_intersections):
     return current_duration
 
 
+def beam_d2(current_queues, current_intersections, interval=10):
+    next_intersections = copy.copy(current_intersections)
+    next_best_h = float("inf")
+    best_h = float("inf")
+    depth_1 = expand_best(current_queues, current_intersections, interval)
+    depth_2 = []
+    for current_intersections, current_queues, _ in depth_1:
+        depth_2 += expand(current_queues, current_intersections, interval)
+    for _, try_queues, try_intersections in depth_2:
+        try_h = state.heuristic(try_queues, goal)
+        if try_h < best_h:
+            next_best_h = best_h
+            best_h = try_h
+            next_intersections = try_intersections
+    return next_intersections, next_best_h
+
+
+def expand_best(current_queues, current_intersections, interval, beam_len=10):
+    generated = []
+    best = []
+    actions = state.applicable_actions(current_intersections, cycles=True)
+    next_states = itertools.product(*actions.itervalues())
+    for try_state in next_states:
+        try_intersections = copy.copy(current_intersections)
+        for phase in try_state:
+            intersection = phase[0:5]
+            try_intersections[intersection] = (phase, prev_duration(intersection, phase, current_intersections) + interval)
+        active_flows = state.get_rates(try_intersections, current_intersections, interval)
+        max_flows = transition.maximize_flows(active_flows, current_queues)
+        try_queues = state.simulate(current_queues, max_flows)
+        try_h = state.heuristic(try_queues, goal)
+        heapq.heappush(best, (try_h, (try_intersections, try_queues, current_intersections)))
+    i = 0
+    while i < beam_len and i < len(best):
+        min_h, min_state = heapq.heappop(best)
+        generated.append(min_state)
+        i += 1
+    return generated
+
+
 def breadth_first_d2(current_queues, current_intersections, interval=10):
     next_intersections = copy.copy(current_intersections)
     next_best_h = float("inf")
@@ -431,7 +471,7 @@ if __name__ == "__main__":
     #a, b, c, search_alg = 44, 32, 924, breadth_first_d1_learn
 
 
-    a, b, c, search_alg = 200, 152.0, 357.0, breadth_first_d2
+    #a, b, c, search_alg = 200, 152.0, 357.0, breadth_first_d2
     #a, b, c, search_alg = 891, 75, 34, breadth_first_d2
     #a, b, c, search_alg = 411, 539, 50, breadth_first_d2
     #a, b, c, search_alg = 487, 491, 22, breadth_first_d2
@@ -452,6 +492,7 @@ if __name__ == "__main__":
     #a, b, c, search_alg = 456, 421, 123, breadth_first_d2
     #a, b, c, search_alg = 44, 32, 924, breadth_first_d2
 
+    a, b, c, search_alg = 200, 152.0, 357.0, beam_d2
 
     #a, b, c, search_alg = 200, 152.0, 357.0, greedy_b8
     #a, b, c, search_alg = 891, 75, 34, greedy_b8
