@@ -287,6 +287,35 @@ phase_cycles["S1867_s0"] = "S1867_s1"
 phase_cycles["S1867_s1"] = "S1867_s2"
 phase_cycles["S1867_s2"] = "S1867_s0"
 
+# Network B
+
+phase_cycles["S1202b_s0"] = "S1202b_s1"
+phase_cycles["S1202b_s1"] = "S1202b_s2"
+phase_cycles["S1202b_s2"] = "S1202b_s3"
+phase_cycles["S1202b_s3"] = "S1202b_s4"
+phase_cycles["S1202b_s4"] = "S1202b_s5"
+phase_cycles["S1202b_s5"] = "S1202b_s6"
+phase_cycles["S1202b_s6"] = "S1202b_s0"
+phase_cycles["S1349b_s0"] = "S1349b_s1"
+phase_cycles["S1349b_s1"] = "S1349b_s2"
+phase_cycles["S1349b_s2"] = "S1349b_s3"
+phase_cycles["S1349b_s3"] = "S1349b_s0"
+phase_cycles["S6014b_s0"] = "S6014b_s1"
+phase_cycles["S6014b_s1"] = "S6014b_s2"
+phase_cycles["S6014b_s2"] = "S6014b_s3"
+phase_cycles["S6014b_s3"] = "S6014b_s0"
+phase_cycles["S6013b_s0"] = "S6013b_s1"
+phase_cycles["S6013b_s1"] = "S6013b_s2"
+phase_cycles["S6013b_s2"] = "S6013b_s0"
+phase_cycles["S1353b_s0"] = "S1353b_s1"
+phase_cycles["S1353b_s1"] = "S1353b_s2"
+phase_cycles["S1353b_s2"] = "S1353b_s0"
+phase_cycles["S1352b_s0"] = "S1352b_s1"
+phase_cycles["S1352b_s1"] = "S1352b_s0"
+phase_cycles["S1867b_s0"] = "S1867b_s1"
+phase_cycles["S1867b_s1"] = "S1867b_s2"
+phase_cycles["S1867b_s2"] = "S1867b_s0"
+
 def applicable_actions(intersections, cycles=False):
     applicable = {}
 
@@ -397,6 +426,38 @@ def init_queues(a=300.0, b=152.0, c=357.0):
     queues["L1349_1202"] = 10.0
     queues["L1202_1349"] = 10.0
     queues["outside"] = 0
+
+    # Network B
+    queues["L6013b_1202b"] = 0.0
+    queues["L3966b_1202b"] = 15.0 #15% of capacity
+    queues["L1202b_3967b"] = 11.0
+    queues["L1202b_6013b"] = 8.0
+    queues["L1349b_3621b"] = 0.0
+    queues["L1867b_1349b"] = 59.0
+    queues["L1353b_1349b"] = 0.0
+    queues["L1349b_1353b"] = 0.0
+    queues["L3621b_1349b"] = 11.25 #15% of capacity
+    queues["L1349b_1867b"] = 3.0
+    queues["L6159b_6014b"] = 15.0
+    queues["L6013b_6014b"] = 14.0
+    queues["L6014b_6013b"] = 2.0
+    queues["L1353b_6014b"] = 1.0
+    queues["L6014b_1353b"] = 5.0
+    queues["L5840b_6013b"] = 2.0
+    queues["L6013b_5840b"] = 0.0
+    queues["L1352b_1353b"] = 1.0
+    queues["L1353b_1352b"] = 0.0
+    queues["L1352b_1867b"] = 65.0
+    queues["L1867b_1352b"] = 4.0
+    queues["L1867b_3621b"] = 0.0
+    queues["L3621b_1867b"] = 29.0
+    queues["L4574b_1867b"] = 27.0 #15% of capacity
+    queues["L1867b_4574b"] = 5.0
+    queues["L1233b_1352b"] = 16.0
+    queues["L1216b_1352b"] = 10.0
+    queues["L6159b_1353b"] = 0.0
+    queues["L1349b_1202b"] = 10.0
+    queues["L1202b_1349b"] = 10.0
     return queues
 
 edges = {}
