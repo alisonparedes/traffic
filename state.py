@@ -35,6 +35,43 @@ queue_capacity["L6159_1353"] = 24
 queue_capacity["L6159_6014"] = 218
 
 
+# Network B
+queue_capacity["L1202b_1349b"] = 88
+queue_capacity["L1202b_3967b"] = 138
+queue_capacity["L1202b_6013b"] = 61
+queue_capacity["L1216b_1352b"] = 13
+queue_capacity["L1233b_1352b"] = 30
+queue_capacity["L1349b_1202b"] = 89
+queue_capacity["L1349b_1353b"] = 78
+queue_capacity["L1349b_1867b"] = 63
+queue_capacity["L1349b_3621b"] = 181
+queue_capacity["L1352b_1353b"] = 60
+queue_capacity["L1352b_1867b"] = 73
+queue_capacity["L1353b_1349b"] = 88
+queue_capacity["L1353b_1352b"] = 119
+queue_capacity["L1353b_6014b"] = 24
+queue_capacity["L1867b_1349b"] = 104
+queue_capacity["L1867b_1352b"] = 128
+queue_capacity["L1867b_3621b"] = 19
+queue_capacity["L1867b_3621b"] = 62
+queue_capacity["L1867b_4574b"] = 82
+queue_capacity["L3621b_1349b"] = 75
+queue_capacity["L3621b_1867b"] = 60
+queue_capacity["L3966b_1202b"] = 101
+queue_capacity["L4574b_1867b"] = 179
+queue_capacity["L5840b_6013b"] = 40
+queue_capacity["L6013b_1202b"] = 35
+queue_capacity["L6013b_5840b"] = 24
+queue_capacity["L6013b_6014b"] = 94
+queue_capacity["L6014b_1353b"] = 23
+queue_capacity["L6014b_6013b"] = 94
+queue_capacity["L6159b_1353b"] = 24
+queue_capacity["L6159b_6014b"] = 218
+
+# Connects networks A and B
+queue_capacity["L5840_1233b"] = 80  # Average capacity
+queue_capacity["L1233b_5840"] = 80  # Average capacity
+
 def print_change(from_queues, to_queues):
     print("change...")
     for q, load in from_queues.iteritems():
@@ -141,6 +178,86 @@ phase_min["S1867_s2"] = 5
 phase_max["S1867_s0"] = 65
 phase_max["S1867_s1"] = 60
 phase_max["S1867_s2"] = 60
+
+# Network B
+phase_intergreen["S1202b_s0"] = 0
+phase_intergreen["S1202b_s1"] = 0
+phase_intergreen["S1202b_s2"] = 0
+phase_intergreen["S1202b_s3"] = 0
+phase_intergreen["S1202b_s4"] = 5
+phase_intergreen["S1202b_s5"] = 0
+phase_intergreen["S1202b_s6"] = 5
+phase_min["S1202b_s0"] = 5
+phase_min["S1202b_s1"] = 5
+phase_min["S1202b_s2"] = 0
+phase_min["S1202b_s3"] = 5
+phase_min["S1202b_s4"] = 5
+phase_min["S1202b_s5"] = 0
+phase_min["S1202b_s6"] = 5
+phase_max["S1202b_s0"] = 40
+phase_max["S1202b_s1"] = 20
+phase_max["S1202b_s2"] = 10
+phase_max["S1202b_s3"] = 60
+phase_max["S1202b_s4"] = 70
+phase_max["S1202b_s5"] = 15
+phase_max["S1202b_s6"] = 50
+phase_intergreen["S1349b_s0"] = 5
+phase_intergreen["S1349b_s1"] = 5
+phase_intergreen["S1349b_s2"] = 10
+phase_intergreen["S1349b_s3"] = 10
+phase_min["S1349b_s0"] = 5
+phase_min["S1349b_s1"] = 5
+phase_min["S1349b_s2"] = 5
+phase_min["S1349b_s3"] = 10
+phase_max["S1349b_s0"] = 70
+phase_max["S1349b_s1"] = 70
+phase_max["S1349b_s2"] = 70
+phase_max["S1349b_s3"] = 75
+phase_intergreen["S6014b_s0"] = 5
+phase_intergreen["S6014b_s1"] = 10
+phase_intergreen["S6014b_s2"] = 0
+phase_intergreen["S6014b_s3"] = 5
+phase_min["S6014b_s0"] = 5
+phase_min["S6014b_s1"] = 5
+phase_min["S6014b_s2"] = 10
+phase_min["S6014b_s3"] = 5
+phase_max["S6014b_s0"] = 50
+phase_max["S6014b_s1"] = 40
+phase_max["S6014b_s2"] = 50
+phase_max["S6014b_s3"] = 45
+phase_intergreen["S6013b_s0"] = 5
+phase_intergreen["S6013b_s1"] = 10
+phase_intergreen["S6013b_s2"] = 5
+phase_min["S6013b_s0"] = 5
+phase_min["S6013b_s1"] = 5
+phase_min["S6013b_s2"] = 5
+phase_max["S6013b_s0"] = 90
+phase_max["S6013b_s1"] = 95
+phase_max["S6013b_s2"] = 95
+phase_intergreen["S1353b_s0"] = 10
+phase_intergreen["S1353b_s1"] = 10
+phase_intergreen["S1353b_s2"] = 5
+phase_min["S1353b_s0"] = 5
+phase_min["S1353b_s1"] = 5
+phase_min["S1353b_s2"] = 5
+phase_max["S1353b_s0"] = 55
+phase_max["S1353b_s1"] = 50
+phase_max["S1353b_s2"] = 50
+phase_intergreen["S1352b_s0"] = 5
+phase_intergreen["S1352b_s1"] = 25
+phase_min["S1352b_s0"] = 5
+phase_min["S1352b_s1"] = 5
+phase_max["S1352b_s0"] = 55
+phase_max["S1352b_s1"] = 40
+phase_intergreen["S1867b_s0"] = 0
+phase_intergreen["S1867b_s1"] = 20
+phase_intergreen["S1867b_s2"] = 10
+phase_min["S1867b_s0"] = 5
+phase_min["S1867b_s1"] = 5
+phase_min["S1867b_s2"] = 5
+phase_max["S1867b_s0"] = 65
+phase_max["S1867b_s1"] = 60
+phase_max["S1867b_s2"] = 60
 
 phase_cycles = {}
 phase_cycles["S1202_s0"] = "S1202_s1"
@@ -719,6 +836,15 @@ def init_intersections(): #TODO: Model intergreen
     intersections["S1867"] = ("S1867_s0", 0)
     intersections["S6013"] = ("S6013_s0", 0)
     intersections["S6014"] = ("S6014_s0", 0)
+
+    #Bigger network
+    intersections["S1202b"] = ("S1202b_s0", 0)
+    intersections["S1349b"] = ("S1349b_s0", 0)
+    intersections["S1352b"] = ("S1352b_s0", 0)
+    intersections["S1353b"] = ("S1353b_s0", 0)
+    intersections["S1867b"] = ("S1867b_s0", 0)
+    intersections["S6013b"] = ("S6013b_s0", 0)
+    intersections["S6014b"] = ("S6014b_s0", 0)
     return intersections
 
 
