@@ -120,7 +120,7 @@ def beam_d2(current_queues, current_intersections, interval=10):
     return next_intersections, next_best_h
 
 
-def expand_best(current_queues, current_intersections, interval, beam_len=10):
+def expand_best(current_queues, current_intersections, interval, beam_len=5):
     generated = []
     best = []
     actions = state.applicable_actions(current_intersections, cycles=True)
@@ -133,6 +133,7 @@ def expand_best(current_queues, current_intersections, interval, beam_len=10):
         active_flows = state.get_rates(try_intersections, current_intersections, interval)
         max_flows = transition.maximize_flows(active_flows, current_queues)
         try_queues = state.simulate(current_queues, max_flows)
+        #state.print_change(current_queues, try_queues)
         try_h = state.heuristic(try_queues, goal)
         heapq.heappush(best, (try_h, (try_intersections, try_queues, current_intersections)))
     i = 0

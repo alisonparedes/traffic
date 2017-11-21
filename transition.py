@@ -953,6 +953,10 @@ def maximize_flows(rates={}, queues={}):
     m.addConstr(L1233b_5840__L5840_6013
                 <= queues["L1233b_5840"])
 
+
+    m.addConstr(L1352b_1233b__L1233b_5840
+                <= queues["L1352b_1233b"])
+
     # Maximum flow
     '''
     m.addConstr(L1202_3967_sink <= 0.49333 * t * flows["L1202_3967_sink"])
@@ -1258,6 +1262,8 @@ def maximize_flows(rates={}, queues={}):
 
     # Connecting edges
     m.addConstr(L6013_5840__L5840_1233b >= 0)
+    m.addConstr(L1233b_5840__L5840_6013 >= 0)
+    m.addConstr(L1352b_1233b__L1233b_5840 >= 0)
 
 
     ''''
@@ -1275,7 +1281,7 @@ def maximize_flows(rates={}, queues={}):
     m.addConstr(fkj <= 10)
     '''
 
-    #m.Params.outputFlag = 0  # Suppress logging
+    m.Params.outputFlag = 0  # Suppress logging
     m.optimize()
 
     max_flow = {}
