@@ -493,7 +493,26 @@ if __name__ == "__main__":
     #a, b, c, search_alg = 456, 421, 123, breadth_first_d2
     #a, b, c, search_alg = 44, 32, 924, breadth_first_d2
 
-    a, b, c, search_alg = 200, 152.0, 357.0, beam_d2
+    #a, b, c, search_alg = 200, 152.0, 357.0, beam_d2
+    a, b, c, search_alg = 891, 75, 34, beam_d2
+    #a, b, c, search_alg = 411, 539, 50, breadth_first_d2
+    #a, b, c, search_alg = 487, 491, 22, breadth_first_d2
+    #a, b, c, search_alg = 149, 572, 279, breadth_first_d2
+    #a, b, c, search_alg = 835, 39, 126, breadth_first_d2
+    #a, b, c, search_alg = 388, 252, 360, breadth_first_d2
+    #a, b, c, search_alg = 178, 660, 162, breadth_first_d2
+    #a, b, c, search_alg = 266, 317, 417, breadth_first_d2
+    #a, b, c, search_alg = 940, 13, 47, breadth_first_d2
+    #a, b, c, search_alg = 763, 122, 115, breadth_first_d2
+    #a, b, c, search_alg = 491, 45, 464, breadth_first_d2
+    #a, b, c, search_alg = 568, 327, 105, breadth_first_d2
+    #a, b, c, search_alg = 713, 92, 195, breadth_first_d2
+    #a, b, c, search_alg = 401, 98, 501, breadth_first_d2
+    #a, b, c, search_alg = 308, 327, 365, breadth_first_d2
+    #a, b, c, search_alg = 862, 48, 90, breadth_first_d2
+    #a, b, c, search_alg = 133, 209, 658, breadth_first_d2
+    #a, b, c, search_alg = 456, 421, 123, breadth_first_d2
+    #a, b, c, search_alg = 44, 32, 924, breadth_first_d2
 
     #a, b, c, search_alg = 200, 152.0, 357.0, greedy_b8
     #a, b, c, search_alg = 891, 75, 34, greedy_b8
