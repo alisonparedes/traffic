@@ -120,7 +120,7 @@ def beam_d2(current_queues, current_intersections, interval=10):
     return next_intersections, next_best_h
 
 
-def expand_best(current_queues, current_intersections, interval, beam_len=5):
+def expand_best(current_queues, current_intersections, interval, beam_len=10):
     generated = []
     best = []
     actions = state.applicable_actions(current_intersections, cycles=True)
