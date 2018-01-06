@@ -1,0 +1,16 @@
+left,mid,right,alg,ex_time
+200, 152.0, 357.0, breadth_first_d1, 1140
+891, 75, 34, breadth_first_d1, 1470
+835, 39, 126, breadth_first_d1, 1380
+388, 252, 360, breadth_first_d1, 1630
+266, 317, 417, breadth_first_d1, 2110
+940, 13, 47, breadth_first_d1, 1570
+763, 122, 115, breadth_first_d1, 1420
+491, 45, 464, breadth_first_d1, 940
+568, 327, 105, breadth_first_d1, 2180
+713, 92, 195, breadth_first_d1, 1170
+401, 98, 501, breadth_first_d1, 1180
+308, 327, 365, breadth_first_d1, 2110
+862, 48, 90, breadth_first_d1, 1460
+133, 209, 658, breadth_first_d1, 2120
+44, 32, 924, breadth_first_d1, 2140
