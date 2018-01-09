@@ -168,12 +168,13 @@ def push_k(beam, beam_len, child_h, child_intersections, child_queues, action):
     if len(beam) < beam_len:
         heapq.heappush(beam, (-child_h, child_intersections, child_queues, action))
     else:
-        max_h, max_intersections, max_queues, max_action = heapq.heappop(beam)
+        max_h, max_intersections, max_queues, max_action = heapq.heappop(beam)  # TODO: Use beam[0] to peek
         if -child_h > max_h:
             heapq.heappush(beam, (-child_h, child_intersections, child_queues, action))
         else:
             heapq.heappush(beam, (max_h, max_intersections, max_queues, max_action))
     #print(beam)
+
 
 def generate(current_queues, current_intersections, interval):
     generated = []
