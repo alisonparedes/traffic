@@ -8,6 +8,18 @@ import os
 import state
 import transition
 import random
+import seaborn
+import numpy
+import matplotlib.pyplot as plt
+
+def file_index_generator():
+    i = 0
+    while True:
+        yield i
+        i += 1
+
+
+file_index = file_index_generator()
 
 
 def get_intersection(best):
@@ -101,6 +113,128 @@ def prev_duration(intersection, new_phase, current_intersections):
         return 0
     current_duration = current_intersections[intersection][1]
     return current_duration
+
+
+def beam_d2(current_queues, current_intersections, interval=10):
+    next_intersections = copy.copy(current_intersections)
+    next_best_h = float("inf")
+    best_h = float("inf")
+    depth_1 = expand_best(current_queues, current_intersections, interval)
+    depth_2 = []
+    for current_intersections, current_queues, _ in depth_1:
+        depth_2 += expand(current_queues, current_intersections, interval)
+    for _, try_queues, try_intersections in depth_2:
+        try_h = state.heuristic(try_queues, goal)
+        if try_h < best_h:
+            next_best_h = best_h
+            best_h = try_h
+            next_intersections = try_intersections
+    #x = numpy.random.normal(size=100)
+    #print(x)
+    #seaborn.set(color_codes=True)
+    #seaborn.distplot(x)
+    return next_intersections, next_best_h
+
+
+def beam_dn(current_queues, current_intersections, interval=10, beam_len=10, max_depth=2):
+    depth = 0
+    beam = []
+    heapq.heappush(beam, (float("inf"), current_intersections, current_queues, None))
+    while depth < max_depth:
+        buffer_beam = []
+        #print(len(beam))
+        while len(beam) > 0:
+            h, expanded_intersections, expanded_queues, action = heapq.heappop(beam)
+            generated = generate(expanded_queues, expanded_intersections, interval)
+            for child_intersections, child_queues in generated:
+                #print(child_intersections)
+                child_h = state.heuristic(child_queues, goal)
+                if not action:
+                    action = child_intersections
+                push_k(buffer_beam, beam_len, child_h, child_intersections, child_queues, action)
+                #print(buffer_beam)
+        beam = buffer_beam
+        depth += 1
+    #print(len(buffer_beam))
+    #print(buffer_beam)
+    min_h, min_intersections, min_queues, min_action = heapq.nlargest(1, buffer_beam)[0]
+    next_best_h = float("inf")
+    #print(min_action)
+    return min_action, next_best_h
+
+
+def push_k(beam, beam_len, child_h, child_intersections, child_queues, action):
+    #print(child_intersections)
+    if len(beam) < beam_len:
+        heapq.heappush(beam, (-child_h, child_intersections, child_queues, action))
+    else:
+        max_h, max_intersections, max_queues, max_action = heapq.heappop(beam)  # TODO: Use beam[0] to peek
+        if -child_h > max_h:
+            heapq.heappush(beam, (-child_h, child_intersections, child_queues, action))
+        else:
+            heapq.heappush(beam, (max_h, max_intersections, max_queues, max_action))
+    #print(beam)
+
+
+def generate(current_queues, current_intersections, interval):
+    generated = []
+    actions = state.applicable_actions(current_intersections, cycles=True)
+    next_states = itertools.product(*actions.itervalues())
+    i = 0
+    for try_state in next_states:
+        try_intersections = copy.copy(current_intersections)
+        for phase in try_state:
+            intersection = phase[0:5]
+            try_intersections[intersection] = (phase, prev_duration(intersection, phase, current_intersections) + interval)
+        active_flows = state.get_rates(try_intersections, current_intersections, interval)
+        max_flows = transition.maximize_flows(active_flows, current_queues)
+        try_queues = state.simulate(current_queues, max_flows)
+        generated.append((try_intersections, try_queues))
+        #print(try_intersections)
+        i += 1
+    #print(i)
+    #print(generated)
+    return generated
+
+
+def expand_best(current_queues, current_intersections, interval, beam_len=10):
+    generated = []
+    best = []
+    actions = state.applicable_actions(current_intersections, cycles=True)
+    next_states = itertools.product(*actions.itervalues())
+    #print("--------")
+    #x = []  # To visualize distribution of scores
+    h_min = float("inf")  # For better confidence in my implementation; h(visited) = h_min
+    for try_state in next_states:
+        try_intersections = copy.copy(current_intersections)
+        for phase in try_state:
+            intersection = phase[0:5]
+            try_intersections[intersection] = (phase, prev_duration(intersection, phase, current_intersections) + interval)
+        active_flows = state.get_rates(try_intersections, current_intersections, interval)
+        max_flows = transition.maximize_flows(active_flows, current_queues)
+        try_queues = state.simulate(current_queues, max_flows)
+        #state.print_change(current_queues, try_queues)
+        try_h = state.heuristic(try_queues, goal)
+        #print(try_h)
+        #x.append(try_h)
+        heapq.heappush(best, (try_h, (try_intersections, try_queues, current_intersections)))
+        if try_h < h_min:
+            h_min = try_h
+    #if len(x) > 1:
+    #    print(len(x))
+    #    h_plot = seaborn.distplot(x, kde=False, rug=True)
+    #    h_fig = h_plot.get_figure()
+    #    plt.savefig("expand_best_{0}".format(next(file_index)))
+    #    plt.clf()
+    print(h_min)
+    i = 0
+    #print("--------")
+    while i < beam_len and i < len(best):
+        min_h, min_state = heapq.heappop(best)
+        #print(min_h)
+        generated.append(min_state)
+        i += 1
+    return generated
 
 
 def breadth_first_d2(current_queues, current_intersections, interval=10):
@@ -283,7 +417,7 @@ def rta_star(initial_queues, initial_intersections, search=random_next):
         start_time = time.clock()
         next_intersections, new_h = search(current_queues, current_intersections)
         end_time = time.clock()-start_time
-        print(end_time)
+        #print(end_time)
         #print(next_intersections)
         rates = state.get_rates(next_intersections, current_intersections, interval)
         #print(current_queues)
@@ -295,7 +429,7 @@ def rta_star(initial_queues, initial_intersections, search=random_next):
         visited[classify_state(current_intersections)] = new_h + 1
         current_queues = next_queues
         current_intersections = next_intersections
-        #print(state.heuristic(next_queues, goal))
+        print(state.heuristic(current_queues, goal))
         #print(visited)
         execution_time += interval
         #print(next_intersections)
@@ -431,7 +565,7 @@ if __name__ == "__main__":
     #a, b, c, search_alg = 44, 32, 924, breadth_first_d1_learn
 
 
-    a, b, c, search_alg = 200, 152.0, 357.0, breadth_first_d2
+    #a, b, c, search_alg = 200, 152.0, 357.0, breadth_first_d2
     #a, b, c, search_alg = 891, 75, 34, breadth_first_d2
     #a, b, c, search_alg = 411, 539, 50, breadth_first_d2
     #a, b, c, search_alg = 487, 491, 22, breadth_first_d2
@@ -452,6 +586,48 @@ if __name__ == "__main__":
     #a, b, c, search_alg = 456, 421, 123, breadth_first_d2
     #a, b, c, search_alg = 44, 32, 924, breadth_first_d2
 
+    #a, b, c, search_alg = 200, 152.0, 357.0, beam_d2
+    #a, b, c, search_alg = 891, 75, 34, beam_d2
+    #a, b, c, search_alg = 411, 539, 50, beam_d2
+    #a, b, c, search_alg = 487, 491, 22, beam_d2
+    #a, b, c, search_alg = 149, 572, 279, beam_d2
+    #a, b, c, search_alg = 835, 39, 126, beam_d2
+    #a, b, c, search_alg = 388, 252, 360, beam_d2
+    #a, b, c, search_alg = 178, 660, 162, beam_d2
+    #a, b, c, search_alg = 266, 317, 417, beam_d2
+    #a, b, c, search_alg = 940, 13, 47, beam_d2
+    #a, b, c, search_alg = 763, 122, 115, beam_d2
+    #a, b, c, search_alg = 491, 45, 464, beam_d2
+    #a, b, c, search_alg = 568, 327, 105, beam_d2
+    #a, b, c, search_alg = 713, 92, 195, beam_d2
+    #a, b, c, search_alg = 401, 98, 501, beam_d2
+    #a, b, c, search_alg = 308, 327, 365, beam_d2
+    #a, b, c, search_alg = 862, 48, 90, beam_d2
+    #a, b, c, search_alg = 133, 209, 658, beam_d2
+    #a, b, c, search_alg = 456, 421, 123, beam_d2
+    #a, b, c, search_alg = 44, 32, 924, beam_d2
+
+
+    #a, b, c, search_alg = 200, 152.0, 357.0, beam_dn
+    #a, b, c, search_alg = 891, 75, 34, beam_dn
+    a, b, c, search_alg = 411, 539, 50, beam_dn
+    #a, b, c, search_alg = 487, 491, 22, beam_d2
+    #a, b, c, search_alg = 149, 572, 279, beam_d2
+    #a, b, c, search_alg = 835, 39, 126, beam_d2
+    #a, b, c, search_alg = 388, 252, 360, beam_d2
+    #a, b, c, search_alg = 178, 660, 162, beam_d2
+    #a, b, c, search_alg = 266, 317, 417, beam_d2
+    #a, b, c, search_alg = 940, 13, 47, beam_d2
+    #a, b, c, search_alg = 763, 122, 115, beam_d2
+    #a, b, c, search_alg = 491, 45, 464, beam_d2
+    #a, b, c, search_alg = 568, 327, 105, beam_d2
+    #a, b, c, search_alg = 713, 92, 195, beam_d2
+    #a, b, c, search_alg = 401, 98, 501, beam_d2
+    #a, b, c, search_alg = 308, 327, 365, beam_d2
+    #a, b, c, search_alg = 862, 48, 90, beam_d2
+    #a, b, c, search_alg = 133, 209, 658, beam_d2
+    #a, b, c, search_alg = 456, 421, 123, beam_d2
+    #a, b, c, search_alg = 44, 32, 924, beam_d2
 
     #a, b, c, search_alg = 200, 152.0, 357.0, greedy_b8
     #a, b, c, search_alg = 891, 75, 34, greedy_b8

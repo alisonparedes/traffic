@@ -710,7 +710,7 @@ else:
 
 
 
-def init_intersections(): #TODO: Model intergreen
+def init_intersections():
     intersections = {}
     intersections["S1202"] = ("S1202_s0", 0)
     intersections["S1349"] = ("S1349_s0", 0)
