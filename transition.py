@@ -1,10 +1,12 @@
 # from gurobipy import *
 from scipy.optimize import linprog
 import numpy as np
+import time
 
-def maximize_flows(rates={}, queues={}, lp_solver=1):
+def maximize_flows(rates={}, queues={}, lp_solver=0):
 
     if lp_solver == 0:
+        start_time = time.clock()
 
         x_index = {}
 
@@ -26,65 +28,65 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         x_index['L1349_1867__L1867_4574'] = 15
         x_index['L1349_3621__outside'] = 16
         x_index['L1352_1353__L1353_6014'] = 17
-        x_index['L1352_1353__L1353_6014'] = 18
-        x_index['L1352_1353__outside'] = 19
-        x_index['L1352_1353__outside'] = 20
-        x_index['L1352_1867__L1867_1349'] = 21
-        x_index['L1352_1867__L1867_3621'] = 22
-        x_index['L1352_1867__L1867_4574'] = 23
-        x_index['L1353_1349__L1349_1202'] = 24
-        x_index['L1353_1349__L1349_1867'] = 25
-        x_index['L1353_1349__L1349_3621'] = 26
-        x_index['L1353_1352__outside'] = 27
-        x_index['L1353_1352__outside'] = 28
-        x_index['L1353_6014__L6014_6013'] = 29
-        x_index['L1353_6014__outside'] = 30
-        x_index['L1867_1349__L1349_1202'] = 31
-        x_index['L1867_1349__L1349_1353'] = 32
-        x_index['L1867_1349__L1349_3621'] = 33
-        x_index['L1867_1352__L1352_1353'] = 34
-        x_index['L1867_1352__outside'] = 35
-        x_index['L1867_1352__outside'] = 36
-        x_index['L1867_3621__outside'] = 37
-        x_index['L1867_4574__outside'] = 38
-        x_index['L3621_1349__L1349_1202'] = 39
-        x_index['L3621_1349__L1349_1353'] = 40
-        x_index['L3621_1867__L1867_1349'] = 41
-        x_index['L3621_1867__L1867_1352'] = 42
-        x_index['L3621_1867__L1867_4574'] = 43
-        x_index['L3966_1202__L1202_1349'] = 44
-        x_index['L3966_1202__L1202_6013'] = 45
-        x_index['L4574_1867__L1867_1349'] = 46
-        x_index['L4574_1867__L1867_1352'] = 47
-        x_index['L4574_1867__L1867_3621'] = 48
-        x_index['L5840_6013__L6013_1202'] = 49
-        x_index['L5840_6013__L6013_6014'] = 50
-        x_index['L6013_1202__L1202_1349'] = 51
-        x_index['L6013_1202__L1202_3967'] = 52
-        x_index['L6013_5840__outside'] = 53
-        x_index['L6013_6014__L6014_1353'] = 54
-        x_index['L6013_6014__outside'] = 55
-        x_index['L6014_1353__L1353_1349'] = 56
-        x_index['L6014_1353__L1353_1352'] = 57
-        x_index['L6014_6013__L6013_1202'] = 58
-        x_index['L6014_6013__L6013_5840'] = 59
-        x_index['L6159_1353__L1353_1349'] = 60
-        x_index['L6159_1353__L1353_1352'] = 61
-        x_index['L6159_6014__L6014_1353'] = 62
-        x_index['L6159_6014__L6014_6013'] = 63
-        x_index['outside__L1216_1352'] = 64
-        x_index['outside__L1233_1352'] = 65
-        x_index['outside__L3621_1867'] = 66
-        x_index['outside__L5840_6013'] = 67
-        x_index['outside__L6159_1353'] = 68
-        x_index['outside__L6159_6014'] = 69
+        #x_index['L1352_1353__L1353_6014'] = 18
+        x_index['L1352_1353__outside'] = 18
+        #x_index['L1352_1353__outside'] = 20
+        x_index['L1352_1867__L1867_1349'] = 19
+        x_index['L1352_1867__L1867_3621'] = 20
+        x_index['L1352_1867__L1867_4574'] = 21
+        x_index['L1353_1349__L1349_1202'] = 22
+        x_index['L1353_1349__L1349_1867'] = 23
+        x_index['L1353_1349__L1349_3621'] = 24
+        x_index['L1353_1352__outside'] = 25
+        #x_index['L1353_1352__outside'] = 28
+        x_index['L1353_6014__L6014_6013'] = 26
+        x_index['L1353_6014__outside'] = 27
+        x_index['L1867_1349__L1349_1202'] = 28
+        x_index['L1867_1349__L1349_1353'] = 29
+        x_index['L1867_1349__L1349_3621'] = 30
+        x_index['L1867_1352__L1352_1353'] = 31
+        x_index['L1867_1352__outside'] = 32
+        #x_index['L1867_1352__outside'] = 36
+        x_index['L1867_3621__outside'] = 33
+        x_index['L1867_4574__outside'] = 34
+        x_index['L3621_1349__L1349_1202'] = 35
+        x_index['L3621_1349__L1349_1353'] = 36
+        x_index['L3621_1867__L1867_1349'] = 37
+        x_index['L3621_1867__L1867_1352'] = 38
+        x_index['L3621_1867__L1867_4574'] = 39
+        x_index['L3966_1202__L1202_1349'] = 40
+        x_index['L3966_1202__L1202_6013'] = 41
+        x_index['L4574_1867__L1867_1349'] = 42
+        x_index['L4574_1867__L1867_1352'] = 43
+        x_index['L4574_1867__L1867_3621'] = 44
+        x_index['L5840_6013__L6013_1202'] = 45
+        x_index['L5840_6013__L6013_6014'] = 46
+        x_index['L6013_1202__L1202_1349'] = 47
+        x_index['L6013_1202__L1202_3967'] = 48
+        x_index['L6013_5840__outside'] = 49
+        x_index['L6013_6014__L6014_1353'] = 50
+        x_index['L6013_6014__outside'] = 51
+        x_index['L6014_1353__L1353_1349'] = 52
+        x_index['L6014_1353__L1353_1352'] = 53
+        x_index['L6014_6013__L6013_1202'] = 54
+        x_index['L6014_6013__L6013_5840'] = 55
+        x_index['L6159_1353__L1353_1349'] = 56
+        x_index['L6159_1353__L1353_1352'] = 57
+        x_index['L6159_6014__L6014_1353'] = 58
+        x_index['L6159_6014__L6014_6013'] = 59
+        x_index['outside__L1216_1352'] = 60
+        x_index['outside__L1233_1352'] = 61
+        x_index['outside__L3621_1867'] = 62
+        x_index['outside__L5840_6013'] = 63
+        x_index['outside__L6159_1353'] = 64
+        x_index['outside__L6159_6014'] = 65
 
-        x = np.empty(70)
-        x.fill(-1)  # Because scipy.linprog can only minimize
+        c = np.empty(66)
+        c.fill(-1)  # Because scipy.linprog can only minimize
         b = []
         A = []
 
-        cap_L1202_1349 = np.empty(len(x))
+        cap_L1202_1349 = np.empty(len(c))
         cap_L1202_1349.fill(0)
         cap_L1202_1349[x_index['L6013_1202__L1202_1349']] = 1
         cap_L1202_1349[x_index['L3966_1202__L1202_1349']] = 1
@@ -93,14 +95,14 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1202_1349)
         b.append(88 - queues["L1202_1349"])
 
-        cur_L1202_1349 = np.empty(70)
+        cur_L1202_1349 = np.empty(len(c))
         cur_L1202_1349.fill(0)
         cur_L1202_1349[x_index['L1202_1349__L1349_1867']] = 1
         cur_L1202_1349[x_index['L1202_1349__L1349_3621']] = 1
         A.append(cur_L1202_1349)
         b.append(queues["L1202_1349"])
 
-        cap_L1202_3967 = np.empty(70)
+        cap_L1202_3967 = np.empty(len(c))
         cap_L1202_3967.fill(0)
         cap_L1202_3967[x_index['L6013_1202__L1202_3967']] = 1
         cap_L1202_3967[x_index['L1349_1202__L1202_3967']] = 1
@@ -108,13 +110,13 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1202_3967)
         b.append(138 - queues["L1202_3967"])
 
-        cur_L1202_3967 = np.empty(70)
+        cur_L1202_3967 = np.empty(len(c))
         cur_L1202_3967.fill(0)
         cur_L1202_3967[x_index['L1202_3967__outside']] = 1
         A.append(cur_L1202_3967)
         b.append(queues["L1202_3967"])
 
-        cap_L1202_6013 = np.empty(70)
+        cap_L1202_6013 = np.empty(len(c))
         cap_L1202_6013.fill(0)
         cap_L1202_6013[x_index['L1349_1202__L1202_6013']] = 1
         cap_L1202_6013[x_index['L3966_1202__L1202_6013']] = 1
@@ -123,14 +125,14 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1202_6013)
         b.append(61 - queues["L1202_6013"])
 
-        cur_L1202_6013 = np.empty(70)
+        cur_L1202_6013 = np.empty(len(c))
         cur_L1202_6013.fill(0)
         cur_L1202_6013[x_index['L1202_6013__L6013_5840']] = 1
         cur_L1202_6013[x_index['L1202_6013__L6013_6014']] = 1
         A.append(cur_L1202_6013)
         b.append(queues["L1202_6013"])
 
-        cap_L1216_1352 = np.empty(70)
+        cap_L1216_1352 = np.empty(len(c))
         cap_L1216_1352.fill(0)
         cap_L1216_1352[x_index['outside__L1216_1352']] = 1
         cap_L1216_1352[x_index['L1216_1352__L1352_1867']] = -1
@@ -138,14 +140,14 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1216_1352)
         b.append(13 - queues["L1216_1352"])
 
-        cur_L126_1352 = np.empty(70)
-        cur_L126_1352.fill(0)
-        cur_L126_1352[x_index['L1216_1352__L1352_1867']] = 1
-        cur_L126_1352[x_index['L1216_1352__outside']] = 1
-        A.append(cur_L126_1352)
+        cur_L1216_1352 = np.empty(len(c))
+        cur_L1216_1352.fill(0)
+        cur_L1216_1352[x_index['L1216_1352__L1352_1867']] = 1
+        cur_L1216_1352[x_index['L1216_1352__outside']] = 1
+        A.append(cur_L1216_1352)
         b.append(queues["L1216_1352"])
 
-        cap_L1233_1352 = np.empty(70)
+        cap_L1233_1352 = np.empty(len(c))
         cap_L1233_1352.fill(0)
         cap_L1233_1352[x_index['outside__L1233_1352']] = 1
         cap_L1233_1352[x_index['L1233_1352__L1352_1353']] = -1
@@ -154,7 +156,7 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1233_1352)
         b.append(30 - queues["L1233_1352"])
 
-        cur_L1233_1352 = np.empty(70)
+        cur_L1233_1352 = np.empty(len(c))
         cur_L1233_1352.fill(0)
         cur_L1233_1352[x_index['L1233_1352__L1352_1353']] = 1
         cur_L1233_1352[x_index['L1233_1352__L1352_1867']] = 1
@@ -162,7 +164,7 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cur_L1233_1352)
         b.append(queues["L1233_1352"])
 
-        cap_L1349_1202 = np.empty(70)
+        cap_L1349_1202 = np.empty(len(c))
         cap_L1349_1202.fill(0)
         cap_L1349_1202[x_index['L1353_1349__L1349_1202']] = 1
         cap_L1349_1202[x_index['L3621_1349__L1349_1202']] = 1
@@ -172,14 +174,14 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1349_1202)
         b.append(89 - queues["L1349_1202"])
 
-        cur_L1349_1202 = np.empty(70)
+        cur_L1349_1202 = np.empty(len(c))
         cur_L1349_1202.fill(0)
         cur_L1349_1202[x_index['L1349_1202__L1202_3967']] = 1
         cur_L1349_1202[x_index['L1349_1202__L1202_6013']] = 1
         A.append(cur_L1349_1202)
         b.append(queues["L1349_1202"])
 
-        cap_L1349_1353 = np.empty(70)
+        cap_L1349_1353 = np.empty(len(c))
         cap_L1349_1353.fill(0)
         cap_L1349_1353[x_index['L3621_1349__L1349_1353']] = 1
         cap_L1349_1353[x_index['L1867_1349__L1349_1353']] = 1
@@ -188,14 +190,14 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1349_1353)
         b.append(78 - queues["L1349_1353"])
 
-        cur_L1349_1353 = np.empty(70)
+        cur_L1349_1353 = np.empty(len(c))
         cur_L1349_1353.fill(0)
         cur_L1349_1353[x_index['L1349_1353__L1353_1352']] = 1
         cur_L1349_1353[x_index['L1349_1353__outside']] = 1
         A.append(cur_L1349_1353)
         b.append(queues["L1349_1353"])
 
-        cap_L1349_1867 = np.empty(70)
+        cap_L1349_1867 = np.empty(len(c))
         cap_L1349_1867.fill(0)
         cap_L1349_1867[x_index['L1353_1349__L1349_1867']] = 1
         cap_L1349_1867[x_index['L1202_1349__L1349_1867']] = 1
@@ -204,14 +206,14 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1349_1867)
         b.append(63 - queues["L1349_1867"])
 
-        cur_L1349_1867 = np.empty(70)
+        cur_L1349_1867 = np.empty(len(c))
         cur_L1349_1867.fill(0)
         cur_L1349_1867[x_index['L1349_1867__L1867_1352']] = 1
         cur_L1349_1867[x_index['L1349_1867__L1867_4574']] = 1
         A.append(cur_L1349_1867)
         b.append(queues["L1349_1867"])
 
-        cap_L1349_3621 = np.empty(70)
+        cap_L1349_3621 = np.empty(len(c))
         cap_L1349_3621.fill(0)
         cap_L1349_3621[x_index['L1867_1349__L1349_3621']] = 1
         cap_L1349_3621[x_index['L1202_1349__L1349_3621']] = 1
@@ -220,13 +222,13 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1349_3621)
         b.append(181 - queues["L1349_3621"])
 
-        cur_L1349_3621 = np.empty(70)
+        cur_L1349_3621 = np.empty(len(c))
         cur_L1349_3621.fill(0)
         cur_L1349_3621[x_index['L1349_3621__outside']] = 1
         A.append(cur_L1349_3621)
         b.append(queues["L1349_3621"])
 
-        cap_L1352_1353 = np.empty(70)
+        cap_L1352_1353 = np.empty(len(c))
         cap_L1352_1353.fill(0)
         cap_L1352_1353[x_index['L1867_1352__L1352_1353']] = 1
         cap_L1352_1353[x_index['L1233_1352__L1352_1353']] = 1
@@ -235,14 +237,14 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1352_1353)
         b.append(60 - queues["L1352_1353"])
 
-        cur_L1352_1353 = np.empty(70)
+        cur_L1352_1353 = np.empty(len(c))
         cur_L1352_1353.fill(0)
         cur_L1352_1353[x_index['L1352_1353__L1353_6014']] = 1
         cur_L1352_1353[x_index['L1352_1353__outside']] = 1
         A.append(cur_L1352_1353)
         b.append(queues["L1352_1353"])
 
-        cap_L1352_1867 = np.empty(70)
+        cap_L1352_1867 = np.empty(len(c))
         cap_L1352_1867.fill(0)
         cap_L1352_1867[x_index['L1216_1352__L1352_1867']] = 1
         cap_L1352_1867[x_index['L1233_1352__L1352_1867']] = 1
@@ -252,7 +254,7 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1352_1867)
         b.append(73 - queues["L1352_1867"])
 
-        cur_L1352_1867 = np.empty(70)
+        cur_L1352_1867 = np.empty(len(c))
         cur_L1352_1867.fill(0)
         cur_L1352_1867[x_index['L1352_1867__L1867_1349']] = 1
         cur_L1352_1867[x_index['L1352_1867__L1867_3621']] = 1
@@ -260,7 +262,7 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cur_L1352_1867)
         b.append(queues["L1352_1867"])
 
-        cap_L1353_1349 = np.empty(70)
+        cap_L1353_1349 = np.empty(len(c))
         cap_L1353_1349.fill(0)
         cap_L1353_1349[x_index['L6159_1353__L1353_1349']] = 1
         cap_L1353_1349[x_index['L6014_1353__L1353_1349']] = 1
@@ -270,7 +272,7 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1353_1349)
         b.append(88 - queues["L1353_1349"])
 
-        cur_L1353_1349 = np.empty(70)
+        cur_L1353_1349 = np.empty(len(c))
         cur_L1353_1349.fill(0)
         cur_L1353_1349[x_index['L1353_1349__L1349_1202']] = 1
         cur_L1353_1349[x_index['L1353_1349__L1349_1867']] = 1
@@ -278,7 +280,7 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cur_L1353_1349)
         b.append(queues["L1353_1349"])
 
-        cap_L1353_1352 = np.empty(70)
+        cap_L1353_1352 = np.empty(len(c))
         cap_L1353_1352.fill(0)
         cap_L1353_1352[x_index['L1349_1353__L1353_1352']] = 1
         cap_L1353_1352[x_index['L6159_1353__L1353_1352']] = 1
@@ -287,13 +289,13 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1353_1352)
         b.append(119 - queues["L1353_1352"])
 
-        cur_L1353_1352 = np.empty(70)
+        cur_L1353_1352 = np.empty(len(c))
         cur_L1353_1352.fill(0)
         cur_L1353_1352[x_index['L1353_1352__outside']] = 1
         A.append(cur_L1353_1352)
         b.append(queues["L1353_1352"])
 
-        cap_L1353_6014 = np.empty(70)
+        cap_L1353_6014 = np.empty(len(c))
         cap_L1353_6014.fill(0)
         cap_L1353_6014[x_index['L1352_1353__L1353_6014']] = 1
         cap_L1353_6014[x_index['L1352_1353__L1353_6014']] = 1
@@ -302,14 +304,14 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1353_6014)
         b.append(24 - queues["L1353_6014"])
 
-        cur_L1353_6014 = np.empty(70)
+        cur_L1353_6014 = np.empty(len(c))
         cur_L1353_6014.fill(0)
         cur_L1353_6014[x_index['L1353_6014__L6014_6013']] = 1
         cur_L1353_6014[x_index['L1353_6014__outside']] = 1
         A.append(cur_L1353_6014)
         b.append(queues["L1353_6014"])
 
-        cap_L1867_1349 = np.empty(70)
+        cap_L1867_1349 = np.empty(len(c))
         cap_L1867_1349.fill(0)
         cap_L1867_1349[x_index['L3621_1867__L1867_1349']] = 1
         cap_L1867_1349[x_index['L1352_1867__L1867_1349']] = 1
@@ -320,7 +322,7 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1867_1349)
         b.append(104 - queues["L1867_1349"])
 
-        cur_L1867_1349 = np.empty(70)
+        cur_L1867_1349 = np.empty(len(c))
         cur_L1867_1349.fill(0)
         cur_L1867_1349[x_index['L1867_1349__L1349_1202']] = 1
         cur_L1867_1349[x_index['L1867_1349__L1349_1353']] = 1
@@ -328,7 +330,7 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cur_L1867_1349)
         b.append(queues["L1867_1349"])
 
-        cap_L1867_1352 = np.empty(70)
+        cap_L1867_1352 = np.empty(len(c))
         cap_L1867_1352.fill(0)
         cap_L1867_1352[x_index['L4574_1867__L1867_1352']] = 1
         cap_L1867_1352[x_index['L1349_1867__L1867_1352']] = 1
@@ -338,14 +340,14 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1867_1352)
         b.append(128 - queues["L1867_1352"])
 
-        cur_L1867_1352 = np.empty(70)
+        cur_L1867_1352 = np.empty(len(c))
         cur_L1867_1352.fill(0)
         cur_L1867_1352[x_index['L1867_1352__L1352_1353']] = 1
         cur_L1867_1352[x_index['L1867_1352__outside']] = 1
         A.append(cur_L1867_1352)
         b.append(queues["L1867_1352"])
 
-        cap_L1867_3621 = np.empty()
+        cap_L1867_3621 = np.empty(len(c))
         cap_L1867_3621.fill(0)
         cap_L1867_3621[x_index['L4574_1867__L1867_3621']] = 1
         cap_L1867_3621[x_index['L1352_1867__L1867_3621']] = 1
@@ -353,21 +355,23 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1867_3621)
         b.append(19 - queues["L1867_3621"])
 
-        cur_L1867_3621 = np.empty()
+        cur_L1867_3621 = np.empty(len(c))
         cur_L1867_3621.fill(0)
         cur_L1867_3621[x_index['L1867_3621__outside']] = 1
         A.append(cur_L1867_3621)
         b.append(queues["L1867_3621"])
 
-        #m.addConstr(L4574_1867__L1867_3621
-        #            + L1352_1867__L1867_3621
-        #            - L1867_3621__outside
-        #            + queues["L1867_3621"]
-        #            <= 62 # A bug? Weaker constraint than above
-        #            , "L1867_3621")
+        #cap_L1867_3621 = np.empty(len(c))
+        #cap_L1867_3621.fill(0)
+        #cap_L1867_3621[x_index['L4574_1867__L1867_3621']] = 1
+        #cap_L1867_3621[x_index['L1352_1867__L1867_3621']] = 1
+        #cap_L1867_3621[x_index['L1867_3621__outside']] = -1
+        #A.append(cap_L1867_3621)
+        #b.append(62 - queues["L1867_3621"])# A bug? Weaker constraint than above
+
         #m.addConstr(L1867_3621__outside
         #            <= queues["L1867_3621"])
-        cap_L1867_4574 = np.empty(70)
+        cap_L1867_4574 = np.empty(len(c))
         cap_L1867_4574.fill(0)
         cap_L1867_4574[x_index['L1349_1867__L1867_4574']] = 1
         cap_L1867_4574[x_index['L1352_1867__L1867_4574']] = 1
@@ -376,7 +380,7 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L1867_4574)
         b.append(82 - queues["L1867_4574"])
 
-        cur_L1867_4574 = np.empty(70)
+        cur_L1867_4574 = np.empty(len(c))
         cur_L1867_4574.fill(0)
         cur_L1867_4574[x_index['L1867_4574__outside']] = 1
         A.append(cur_L1867_4574)
@@ -387,14 +391,14 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         #            <= 75
         #            , "L3621_1349") # This constraint is always true
 
-        cur_L3621_1349 = np.empty(70)
+        cur_L3621_1349 = np.empty(len(c))
         cur_L3621_1349.fill(0)
         cur_L3621_1349[x_index['L3621_1349__L1349_1202']] = 1
         cur_L3621_1349[x_index['L3621_1349__L1349_1353']] = 1
         A.append(cur_L3621_1349)
         b.append(queues["L3621_1349"])
 
-        cap_L3621_1867 = np.empty(70)
+        cap_L3621_1867 = np.empty(len(c))
         cap_L3621_1867.fill(0)
         cap_L3621_1867[x_index['outside__L3621_1867']] = 1
         cap_L3621_1867[x_index['L3621_1867__L1867_1349']] = -1
@@ -403,7 +407,7 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L3621_1867)
         b.append(60 - queues["L3621_1867"])
 
-        cur_L3621_1867 = np.empty(70)
+        cur_L3621_1867 = np.empty(len(c))
         cur_L3621_1867.fill(0)
         cur_L3621_1867[x_index['L3621_1867__L1867_1349']] = 1
         cur_L3621_1867[x_index['L3621_1867__L1867_1352']] = 1
@@ -417,7 +421,7 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         #            <= 101 # Always true
         #            , "L3966_1202")
 
-        cur_L3966_1202 = np.empty()
+        cur_L3966_1202 = np.empty(len(c))
         cur_L3966_1202.fill(0)
         cur_L3966_1202[x_index['L3966_1202__L1202_1349']] = 1
         cur_L3966_1202[x_index['L3966_1202__L1202_6013']] = 1
@@ -431,7 +435,7 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         #            <= 179 # Always true
         #            , "L4574_1867")
 
-        cur_L4574_1867 = np.empty()
+        cur_L4574_1867 = np.empty(len(c))
         cur_L4574_1867.fill(0)
         cur_L4574_1867[x_index['L4574_1867__L1867_1349']] = 1
         cur_L4574_1867[x_index['L4574_1867__L1867_1352']] = 1
@@ -439,7 +443,7 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cur_L4574_1867)
         b.append(queues["L4574_1867"])
 
-        cap_L5840_6013 = np.empty(70)
+        cap_L5840_6013 = np.empty(len(c))
         cap_L5840_6013.fill(0)
         cap_L5840_6013[x_index['outside__L5840_6013']] = 1
         cap_L5840_6013[x_index['L5840_6013__L6013_1202']] = -1
@@ -447,14 +451,14 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L5840_6013)
         b.append(40 - queues["L5840_6013"])
 
-        cur_L5840_6013 = np.empty(70)
+        cur_L5840_6013 = np.empty(len(c))
         cur_L5840_6013.fill(0)
         cur_L5840_6013[x_index['L5840_6013__L6013_1202']] = 1
         cur_L5840_6013[x_index['L5840_6013__L6013_6014']] = 1
         A.append(cur_L5840_6013)
         b.append(queues["L5840_6013"])
 
-        cap_L6013_1202 = np.empty(70)
+        cap_L6013_1202 = np.empty(len(c))
         cap_L6013_1202.fill(0)
         cap_L6013_1202[x_index['L5840_6013__L6013_1202']] = 1
         cap_L6013_1202[x_index['L6014_6013__L6013_1202']] = 1
@@ -463,14 +467,14 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L6013_1202)
         b.append(35 + queues["L6013_1202"])
 
-        cur_L6013_1202 = np.empty(70)
+        cur_L6013_1202 = np.empty(len(c))
         cur_L6013_1202.fill(0)
         cur_L6013_1202[x_index['L6013_1202__L1202_1349']] = 1
         cur_L6013_1202[x_index['L6013_1202__L1202_3967']] = 1
         A.append(cur_L6013_1202)
         b.append(queues["L6013_1202"])
 
-        cap_L6013_5840 = np.empty(70)
+        cap_L6013_5840 = np.empty(len(c))
         cap_L6013_5840.fill(0)
         cap_L6013_5840[x_index['L1202_6013__L6013_5840']] = 1
         cap_L6013_5840[x_index['L6014_6013__L6013_5840']] = 1
@@ -478,29 +482,29 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L6013_5840)
         b.append(24 - queues["L6013_5840"])
 
-        cur_L6013_5840 = np.empty(70)
+        cur_L6013_5840 = np.empty(len(c))
         cur_L6013_5840.fill(0)
         cur_L6013_5840[x_index['L6013_5840__outside']] = 1
         A.append(cur_L6013_5840)
         b.append(queues["L6013_5840"])
 
-        cap_L6013_6014 = np.empty(70)
+        cap_L6013_6014 = np.empty(len(c))
         cap_L6013_6014.fill(0)
         cap_L6013_6014[x_index['L1202_6013__L6013_6014']] = 1
         cap_L6013_6014[x_index['L5840_6013__L6013_6014']] = 1
-        cap_L6013_6014[x_index['L6013_6014__L6014_1353']]  = -1
+        cap_L6013_6014[x_index['L6013_6014__L6014_1353']] = -1
         cap_L6013_6014[x_index['L6013_6014__outside']] = -1
         A.append(cap_L6013_6014)
         b.append(94 - queues["L6013_6014"])
 
-        cur_L6013_6014 = np.empty(70)
+        cur_L6013_6014 = np.empty(len(c))
         cur_L6013_6014.fill(0)
         cur_L6013_6014[x_index['L6013_6014__L6014_1353']] = 1
         cur_L6013_6014[x_index['L6013_6014__outside']] = 1
         A.append(cur_L6013_6014)
         b.append(queues["L6013_6014"])
 
-        cap_L6014_1353 = np.empty(70)
+        cap_L6014_1353 = np.empty(len(c))
         cap_L6014_1353.fill(0)
         cap_L6014_1353[x_index['L6013_6014__L6014_1353']] = 1
         cap_L6014_1353[x_index['L6159_6014__L6014_1353']] = 1
@@ -509,30 +513,30 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L6014_1353)
         b.append(23 - queues["L6014_1353"])
 
-        cur_L6014_1353 = np.empty(70)
+        cur_L6014_1353 = np.empty(len(c))
         cur_L6014_1353.fill(0)
         cur_L6014_1353[x_index['L6014_1353__L1353_1349']] = 1
         cur_L6014_1353[x_index['L6014_1353__L1353_1352']] = 1
         A.append(cur_L6014_1353)
         b.append(queues["L6014_1353"])
 
-        cap_L6014_6013 = np.empty(70)
+        cap_L6014_6013 = np.empty(len(c))
         cap_L6014_6013.fill(0)
         cap_L6014_6013[x_index['L1353_6014__L6014_6013']] = 1
         cap_L6014_6013[x_index['L6159_6014__L6014_6013']] = 1
         cap_L6014_6013[x_index['L6014_6013__L6013_1202']] = -1
         cap_L6014_6013[x_index['L6014_6013__L6013_5840']] = -1
         A.append(cap_L6014_6013)
-        b.append(queues["L6014_6013"])
+        b.append(94 - queues["L6014_6013"])
 
-        cur_L6014_6013 = np.empty(70)
+        cur_L6014_6013 = np.empty(len(c))
         cur_L6014_6013.fill(0)
         cur_L6014_6013[x_index['L6014_6013__L6013_1202']] = 1
         cur_L6014_6013[x_index['L6014_6013__L6013_5840']] = 1
         A.append(cur_L6014_6013)
         b.append(queues["L6014_6013"])
 
-        cap_L6159_1353 = np.empty(70)
+        cap_L6159_1353 = np.empty(len(c))
         cap_L6159_1353.fill(0)
         cap_L6159_1353[x_index['outside__L6159_1353']] = 1
         cap_L6159_1353[x_index['L6159_1353__L1353_1349']] = -1
@@ -540,14 +544,14 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L6159_1353)
         b.append(24 - queues["L6159_1353"])
 
-        cur_L6159_1353 = np.empty(70)
+        cur_L6159_1353 = np.empty(len(c))
         cur_L6159_1353.fill(0)
         cur_L6159_1353[x_index['L6159_1353__L1353_1349']] = 1
         cur_L6159_1353[x_index['L6159_1353__L1353_1352']] = 1
         A.append(cur_L6159_1353)
         b.append(queues["L6159_1353"])
 
-        cap_L6159_6014 = np.empty(70)
+        cap_L6159_6014 = np.empty(len(c))
         cap_L6159_6014.fill(0)
         cap_L6159_6014[x_index['outside__L6159_6014']] = 1
         cap_L6159_6014[x_index['L6159_6014__L6014_1353']] = -1
@@ -555,7 +559,7 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(cap_L6159_6014)
         b.append(218 - queues["L6159_6014"])
 
-        cur_L6159_6014 = np.empty(70)
+        cur_L6159_6014 = np.empty(len(c))
         cur_L6159_6014.fill(0)
         cur_L6159_6014[x_index['L6159_6014__L6014_1353']] = 1
         cur_L6159_6014[x_index['L6159_6014__L6014_6013']] = 1
@@ -568,76 +572,76 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         m.addConstr(L6013_1202_L1202_3967 <= 0.41067 * t * flows["L6013_1202_L1202_3967"])
         m.addConstr(L1349_1202_L1202_3967 <= 0.825 * t * flows["L1349_1202_L1202_3967"])
         '''
-        rate_L1202_1349__L1349_1867 = np.empty(len(x))
-        rate_L1202_1349__L1349_3621 = np.empty(len(x))
-        rate_L1202_3967__outside = np.empty(len(x))
-        rate_L1202_6013__L6013_5840 = np.empty(len(x))
-        rate_L1202_6013__L6013_6014 = np.empty(len(x))
-        rate_L1216_1352__L1352_1867 = np.empty(len(x))
-        rate_L1216_1352__outside = np.empty(len(x))
-        rate_L1233_1352__L1352_1353 = np.empty(len(x))
-        rate_L1233_1352__L1352_1867 = np.empty(len(x))
-        rate_L1233_1352__outside = np.empty(len(x))
-        rate_L1349_1202__L1202_3967 = np.empty(len(x))
-        rate_L1349_1202__L1202_6013 = np.empty(len(x))
-        rate_L1349_1353__L1353_1352 = np.empty(len(x))
-        rate_L1349_1353__outside = np.empty(len(x))
-        rate_L1349_1867__L1867_1352 = np.empty(len(x))
-        rate_L1349_1867__L1867_4574 = np.empty(len(x))
-        rate_L1349_3621__outside = np.empty(len(x))
-        rate_L1352_1353__L1353_6014 = np.empty(len(x))
-        rate_L1352_1353__L1353_6014 = np.empty(len(x))
-        rate_L1352_1353__outside = np.empty(len(x))
-        rate_L1352_1353__outside = np.empty(len(x))
-        rate_L1352_1867__L1867_1349 = np.empty(len(x))
-        rate_L1352_1867__L1867_3621 = np.empty(len(x))
-        rate_L1352_1867__L1867_4574 = np.empty(len(x))
-        rate_L1353_1349__L1349_1202 = np.empty(len(x))
-        rate_L1353_1349__L1349_1867 = np.empty(len(x))
-        rate_L1353_1349__L1349_3621 = np.empty(len(x))
-        rate_L1353_1352__outside = np.empty(len(x))
-        rate_L1353_1352__outside = np.empty(len(x))
-        rate_L1353_6014__L6014_6013 = np.empty(len(x))
-        rate_L1353_6014__outside = np.empty(len(x))
-        rate_L1867_1349__L1349_1202 = np.empty(len(x))
-        rate_L1867_1349__L1349_1353 = np.empty(len(x))
-        rate_L1867_1349__L1349_3621 = np.empty(len(x))
-        rate_L1867_1352__L1352_1353 = np.empty(len(x))
-        rate_L1867_1352__outside = np.empty(len(x))
-        rate_L1867_1352__outside = np.empty(len(x))
-        rate_L1867_3621__outside = np.empty(len(x))
-        rate_L1867_4574__outside = np.empty(len(x))
-        rate_L3621_1349__L1349_1202 = np.empty(len(x))
-        rate_L3621_1349__L1349_1353 = np.empty(len(x))
-        rate_L3621_1867__L1867_1349 = np.empty(len(x))
-        rate_L3621_1867__L1867_1352 = np.empty(len(x))
-        rate_L3621_1867__L1867_4574 = np.empty(len(x))
-        rate_L3966_1202__L1202_1349 = np.empty(len(x))
-        rate_L3966_1202__L1202_6013 = np.empty(len(x))
-        rate_L4574_1867__L1867_1349 = np.empty(len(x))
-        rate_L4574_1867__L1867_1352 = np.empty(len(x))
-        rate_L4574_1867__L1867_3621 = np.empty(len(x))
-        rate_L5840_6013__L6013_1202 = np.empty(len(x))
-        rate_L5840_6013__L6013_6014 = np.empty(len(x))
-        rate_L6013_1202__L1202_1349 = np.empty(len(x))
-        rate_L6013_1202__L1202_3967 = np.empty(len(x))
-        rate_L6013_5840__outside = np.empty(len(x))
-        rate_L6013_6014__L6014_1353 = np.empty(len(x))
-        rate_L6013_6014__outside = np.empty(len(x))
-        rate_L6014_1353__L1353_1349 = np.empty(len(x))
-        rate_L6014_1353__L1353_1352 = np.empty(len(x))
-        rate_L6014_6013__L6013_1202 = np.empty(len(x))
-        rate_L6014_6013__L6013_5840 = np.empty(len(x))
-        rate_L6159_1353__L1353_1349 = np.empty(len(x))
-        rate_L6159_1353__L1353_1352 = np.empty(len(x))
-        rate_L6159_6014__L6014_1353 = np.empty(len(x))
-        rate_L6159_6014__L6014_6013 = np.empty(len(x))
-        rate_outside__L1216_1352 = np.empty(len(x))
-        rate_outside__L1233_1352 = np.empty(len(x))
-        rate_outside__L3621_1867 = np.empty(len(x))
-        rate_outside__L5840_6013 = np.empty(len(x))
-        rate_outside__L6159_1353 = np.empty(len(x))
-        rate_outside__L6159_6014 = np.empty(len(x))
+        rate_L1202_1349__L1349_1867 = np.empty(len(c))
+        rate_L1202_1349__L1349_3621 = np.empty(len(c))
+        rate_L1202_3967__outside = np.empty(len(c))
+        rate_L1202_6013__L6013_5840 = np.empty(len(c))
+        rate_L1202_6013__L6013_6014 = np.empty(len(c))
+        rate_L1216_1352__L1352_1867 = np.empty(len(c))
+        rate_L1216_1352__outside = np.empty(len(c))
+        rate_L1233_1352__L1352_1353 = np.empty(len(c))
+        rate_L1233_1352__L1352_1867 = np.empty(len(c))
+        rate_L1233_1352__outside = np.empty(len(c))
+        rate_L1349_1202__L1202_3967 = np.empty(len(c))
+        rate_L1349_1202__L1202_6013 = np.empty(len(c))
+        rate_L1349_1353__L1353_1352 = np.empty(len(c))
+        rate_L1349_1353__outside = np.empty(len(c))
+        rate_L1349_1867__L1867_1352 = np.empty(len(c))
+        rate_L1349_1867__L1867_4574 = np.empty(len(c))
+        rate_L1349_3621__outside = np.empty(len(c))
+        rate_L1352_1353__L1353_6014 = np.empty(len(c))
+        #rate_L1352_1353__L1353_6014 = np.empty(len(c))
+        rate_L1352_1353__outside = np.empty(len(c))
+        #rate_L1352_1353__outside = np.empty(len(c))
+        rate_L1352_1867__L1867_1349 = np.empty(len(c))
+        rate_L1352_1867__L1867_3621 = np.empty(len(c))
+        rate_L1352_1867__L1867_4574 = np.empty(len(c))
+        rate_L1353_1349__L1349_1202 = np.empty(len(c))
+        rate_L1353_1349__L1349_1867 = np.empty(len(c))
+        rate_L1353_1349__L1349_3621 = np.empty(len(c))
+        rate_L1353_1352__outside = np.empty(len(c))
+        #rate_L1353_1352__outside = np.empty(len(c))
+        rate_L1353_6014__L6014_6013 = np.empty(len(c))
+        rate_L1353_6014__outside = np.empty(len(c))
+        rate_L1867_1349__L1349_1202 = np.empty(len(c))
+        rate_L1867_1349__L1349_1353 = np.empty(len(c))
+        rate_L1867_1349__L1349_3621 = np.empty(len(c))
+        rate_L1867_1352__L1352_1353 = np.empty(len(c))
+        rate_L1867_1352__outside = np.empty(len(c))
+        #rate_L1867_1352__outside = np.empty(len(c))
+        rate_L1867_3621__outside = np.empty(len(c))
+        rate_L1867_4574__outside = np.empty(len(c))
+        rate_L3621_1349__L1349_1202 = np.empty(len(c))
+        rate_L3621_1349__L1349_1353 = np.empty(len(c))
+        rate_L3621_1867__L1867_1349 = np.empty(len(c))
+        rate_L3621_1867__L1867_1352 = np.empty(len(c))
+        rate_L3621_1867__L1867_4574 = np.empty(len(c))
+        rate_L3966_1202__L1202_1349 = np.empty(len(c))
+        rate_L3966_1202__L1202_6013 = np.empty(len(c))
+        rate_L4574_1867__L1867_1349 = np.empty(len(c))
+        rate_L4574_1867__L1867_1352 = np.empty(len(c))
+        rate_L4574_1867__L1867_3621 = np.empty(len(c))
+        rate_L5840_6013__L6013_1202 = np.empty(len(c))
+        rate_L5840_6013__L6013_6014 = np.empty(len(c))
+        rate_L6013_1202__L1202_1349 = np.empty(len(c))
+        rate_L6013_1202__L1202_3967 = np.empty(len(c))
+        rate_L6013_5840__outside = np.empty(len(c))
+        rate_L6013_6014__L6014_1353 = np.empty(len(c))
+        rate_L6013_6014__outside = np.empty(len(c))
+        rate_L6014_1353__L1353_1349 = np.empty(len(c))
+        rate_L6014_1353__L1353_1352 = np.empty(len(c))
+        rate_L6014_6013__L6013_1202 = np.empty(len(c))
+        rate_L6014_6013__L6013_5840 = np.empty(len(c))
+        rate_L6159_1353__L1353_1349 = np.empty(len(c))
+        rate_L6159_1353__L1353_1352 = np.empty(len(c))
+        rate_L6159_6014__L6014_1353 = np.empty(len(c))
+        rate_L6159_6014__L6014_6013 = np.empty(len(c))
+        rate_outside__L1216_1352 = np.empty(len(c))
+        rate_outside__L1233_1352 = np.empty(len(c))
+        rate_outside__L3621_1867 = np.empty(len(c))
+        rate_outside__L5840_6013 = np.empty(len(c))
+        rate_outside__L6159_1353 = np.empty(len(c))
+        rate_outside__L6159_6014 = np.empty(len(c))
 
 
         rate_L1202_1349__L1349_1867.fill(0)
@@ -783,9 +787,9 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(rate_L1352_1353__L1353_6014)
         b.append(rates["L1352_1353__L1353_6014"])
 
-        rate_L1352_1353__L1353_6014[x_index['L1352_1353__L1353_6014']] = 1
-        A.append(rate_L1352_1353__L1353_6014)
-        b.append(rates["L1352_1353__L1353_6014"])
+        #rate_L1352_1353__L1353_6014[x_index['L1352_1353__L1353_6014']] = 1
+        #A.append(rate_L1352_1353__L1353_6014)
+        #b.append(rates["L1352_1353__L1353_6014"])
 
         rate_L1352_1353__outside[x_index['L1352_1353__outside']] = 1
         A.append(rate_L1352_1353__outside)
@@ -821,9 +825,9 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(rate_L1353_1352__outside)
         b.append(rates["L1353_1352__outside"])
 
-        rate_L1353_1352__outside[x_index['L1353_1352__outside']] = 1
-        A.append(rate_L1353_1352__outside)
-        b.append(rates["L1353_1352__outside"])
+        #rate_L1353_1352__outside[x_index['L1353_1352__outside']] = 1
+        #A.append(rate_L1353_1352__outside)
+        #b.append(rates["L1353_1352__outside"])
 
         rate_L1353_6014__L6014_6013[x_index['L1353_6014__L6014_6013']] = 1
         A.append(rate_L1353_6014__L6014_6013)
@@ -942,8 +946,8 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         A.append(rate_L6014_6013__L6013_1202)
         b.append(rates["L6014_6013__L6013_1202"])
 
-        rate_L6014_6013__L6013_5840[x_index['L6014_6013__L6013_1202']] = 1
-        A.append(rate_L6014_6013__L6013_1202)
+        rate_L6014_6013__L6013_5840[x_index['L6014_6013__L6013_5840']] = 1
+        A.append(rate_L6014_6013__L6013_5840)
         b.append(rates["L6014_6013__L6013_5840"])
 
         rate_L6159_1353__L1353_1349[x_index['L6159_1353__L1353_1349']] = 1
@@ -979,11 +983,11 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         b.append(rates["outside__L5840_6013"])
 
         rate_outside__L6159_1353[x_index['outside__L5840_6013']] = 1
-        A.append(rate_outside__L5840_6013)
+        A.append(rate_outside__L6159_1353)
         b.append(rates["outside__L6159_1353"])
 
         rate_outside__L6159_6014[x_index['outside__L5840_6013']] = 1
-        A.append(rate_outside__L5840_6013)
+        A.append(rate_outside__L6159_6014)
         b.append(rates["outside__L6159_6014"])
 
         # Non-negative
@@ -1078,14 +1082,14 @@ def maximize_flows(rates={}, queues={}, lp_solver=1):
         m.addConstr(fij <= 1)
         m.addConstr(fkj <= 10)
         '''
-
-        # m.Params.outputFlag = 0  # Suppress logging
-        # m.optimize()
-
-        max_flow = {}
-        for v in m.getVars():
-            max_flow[v.varName] = v.x
-
+        for _ in range(166):
+            # m.Params.outputFlag = 0  # Suppress logging
+            # m.optimize()
+            result = linprog(c, A_ub=A, b_ub=b, bounds=(0, None))
+            #max_flow = {}
+            #for v in m.getVars():
+            #    max_flow[v.varName] = v.x
+        print(time.clock()-start_time)
     # else:
     #     m = Model("transition")
     #
