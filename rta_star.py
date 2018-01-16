@@ -477,7 +477,7 @@ if __name__ == "__main__":
     '''
     import datetime
     #a, b, c, search_alg = 300.0, 152.0, 357.0, breadth_first_d1  #Example from PDDL
-    #a, b, c, search_alg = 200, 152.0, 357.0, breadth_first_d1
+    a, b, c, search_alg = 200, 152.0, 357.0, breadth_first_d1
     #a, b, c, search_alg = 891, 75, 34, breadth_first_d1
     #a, b, c, search_alg = 411, 539, 50, breadth_first_d1
     #a, b, c, search_alg = 487, 491, 22, breadth_first_d1
@@ -610,7 +610,7 @@ if __name__ == "__main__":
 
     #a, b, c, search_alg = 200, 152.0, 357.0, beam_dn
     #a, b, c, search_alg = 891, 75, 34, beam_dn
-    a, b, c, search_alg = 411, 539, 50, beam_dn
+    #a, b, c, search_alg = 411, 539, 50, beam_dn
     #a, b, c, search_alg = 487, 491, 22, beam_d2
     #a, b, c, search_alg = 149, 572, 279, beam_d2
     #a, b, c, search_alg = 835, 39, 126, beam_d2
